@@ -1,11 +1,11 @@
 {
   "name": "shapeit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Object validation tools for Javascript and, specially, Typescript",
   "main": "index.js",
   "scripts": {
-    "release": "npm run build && cp package.json ./dist && npm publish dist",
-    "build": "tsc --build && cp ./package.json ./dist"
+    "release": "npm run build && npm publish dist",
+    "build": "tsc --build && cp package.json README.md LICENSE ./dist"
   },
   "repository": {
     "type": "git",
@@ -13,8 +13,7 @@
   },
   "keywords": [
     "typeguards",
-    "validation",
-    ""
+    "validation"
   ],
   "author": "Diego Fidalgo",
   "license": "MIT",
