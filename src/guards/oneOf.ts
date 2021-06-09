@@ -47,8 +47,8 @@ export = function oneOf<T extends PrimitiveOrGuard<unknown>[]>(...types: T) {
 
             return result;
         }, {
-        errors: null
-    }
+            errors: null
+        }
     );
 
     return isValid;
