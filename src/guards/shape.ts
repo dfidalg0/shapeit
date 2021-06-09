@@ -30,6 +30,8 @@ export = function shape<V extends GuardSchema>(
         return res;
     }, {} as Record<string, Guard<unknown>>);
 
+    const keys = Object.keys(schema);
+
     const isValid: ShapeGuard<UnshapeSchema<V>> = Object.assign(
         (input: unknown): input is UnshapeSchema<V> => {
             if (!isPlainRecord(input)) {
@@ -39,10 +41,6 @@ export = function shape<V extends GuardSchema>(
 
                 return false;
             }
-
-            const keys = Object.keys(schema);
-
-            let result = true;
 
             if (strict) {
                 const extraneousKeys = Object.keys(omit(input, keys));
@@ -67,6 +65,8 @@ export = function shape<V extends GuardSchema>(
 
             const errors: Exclude<ValidationErrors, null> = {};
 
+            let result = true;
+
             for (const [root, guard, value] of entries) {
                 const current = guard(value);
 
@@ -90,11 +90,11 @@ export = function shape<V extends GuardSchema>(
 
             return result;
         }, {
-        errors: null,
-        _shape: {
-            schema, strict
+            errors: null,
+            _shape: {
+                schema, strict
+            }
         }
-    }
     );
 
     return isValid;

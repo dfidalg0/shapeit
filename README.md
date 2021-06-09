@@ -113,7 +113,7 @@ interface Person {
     // Notice "job" is an optional parameter
     job?: {
         id: number;
-        boss_id: number;
+        bossId: number;
     }
 }
 
@@ -126,7 +126,7 @@ const person: Person = {
     ],
     job: {
         id: 13,
-        boss_id: 10
+        bossId: 10
     }
 };
 
@@ -142,17 +142,17 @@ validate(person, {
         // Those rules will be evaluated only if key "job"
         // exists in the person object. So, don't need to
         // worry about that
-        id: async (job_id, assert) => {
+        id: async (jobId, assert) => {
             assert(
-                await existsOnDb(job_id),
+                await existsOnDb(jobId),
                 'This job doesnt exist on database'
             )
         },
         // Rules can be asynchronous functions 🥳
         // and all of them will be executed in parallel
-        boss_id: async (job_id, assert) => {
+        bossId: async (jobId, assert) => {
             assert(
-                await existsOnDb(job_id),
+                await existsOnDb(jobId),
                 'This employee doesnt exist on database'
             )
         }
