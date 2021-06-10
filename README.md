@@ -150,9 +150,9 @@ validate(person, {
         },
         // Rules can be asynchronous functions 🥳
         // and all of them will be executed in parallel
-        bossId: async (jobId, assert) => {
+        bossId: async (bossId, assert) => {
             assert(
-                await existsOnDb(jobId),
+                await existsOnDb(bossId),
                 'This employee doesnt exist on database'
             )
         }
@@ -186,7 +186,7 @@ shapeit now has support for Typescript literal types (requires Typescript 4.1)
 ```js
 const sp = require('shapeit');
 
-const idTemplate = sp.literal(sp.$$('alpha', 'beta'), sp.$('bigint'));
+const idTemplate = sp.literal(sp.$$('alpha', 'beta'), '-', sp.$('bigint'));
 
 const id = getIdFromSomewhere();
 
@@ -194,7 +194,7 @@ if (idTemplate(id)) {
     id; // id is now typed `alpha-${bigint}` | `beta-${bigint}`
 }
 else {
-    idTemplate.errors; // { '$': ["Invalid type provided. Expected: '(literal) ^(alpha|beta)(\\d+)$'"] }
+    idTemplate.errors; // { '$': ["Invalid type provided. Expected: '(literal) ^(alpha|beta)-(\\d+)$'"] }
     // I didn't came with a better idea, so I just printed the regex
     // used for validation.
 }
