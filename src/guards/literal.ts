@@ -3,6 +3,8 @@ import { Template, Concat, BaseName, Literal } from '../types/literals';
 import { errorMessage } from '../utils/messages';
 import { escapeRegex } from '../utils/literals';
 
+export = literal;
+
 /**
  * Creates a guard for a template literal type
  *
@@ -48,8 +50,6 @@ function literal<T extends Template>(...template: T) {
 
     return isValid;
 };
-
-export = literal;
 
 function resolveLiterals(literals: (BaseName | Literal)[]) {
     const match = literals.map(lit => {

@@ -2,6 +2,8 @@ import { PrimitiveOrGuard, GuardType, Guard } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
 import { resolveGuard } from '../utils/guards';
 
+export = oneOf;
+
 /**
  * Creates a guard for a union type from primitive names or other guards
  *
@@ -15,7 +17,7 @@ import { resolveGuard } from '../utils/guards';
  *     console.error(isValid.errors); // Errors found
  * }
  */
-export = function oneOf<T extends PrimitiveOrGuard<unknown>[]>(...types: T) {
+function oneOf<T extends PrimitiveOrGuard<unknown>[]>(...types: T) {
     if (!types.length) {
         throw new Error('No guards provided');
     }

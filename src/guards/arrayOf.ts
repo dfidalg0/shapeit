@@ -3,10 +3,23 @@ import { ValidationErrors } from '../types/validation';
 import { resolveGuard } from '../utils/guards';
 import { errorMessage, sizeErrorMessage } from '../utils/messages';
 
+export = arrayOf;
+
 /**
  * Creates an array shape where all elements must have the same type
+ *
+ * @example
+ * const emailsShape = sp.arrayOf('string');
+ *
+ * @example
+ * const peopleShape = sp.arrayOf(
+ *   sp.shape({
+ *     name: 'string',
+ *     age: 'number'
+ *   })
+ * );
  */
-export = function arrayOf<T extends PrimitiveOrGuard<unknown>>(
+function arrayOf<T extends PrimitiveOrGuard<unknown>>(
     type: T, maxLength = Infinity
 ) {
     const guard = resolveGuard(type);

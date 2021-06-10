@@ -3,6 +3,8 @@ import { Guard } from '../types/guards';
 import { errorMessage } from '../utils/messages';
 import oneOf from './oneOf';
 
+export = narrow;
+
 type Cast<A, B> = A extends B ? A : B;
 
 type Narrowable =
@@ -34,7 +36,7 @@ type Narrow<A> = Cast<A,
  *   input; // typed as 'a' | 'b'
  * }
  */
-export = function narrow <T, U extends Narrow<T>[]> (...targets: U): Guard<U[number]> {
+function narrow <T, U extends Narrow<T>[]> (...targets: U): Guard<U[number]> {
     if (targets.length === 1) {
         const target = targets[0];
 

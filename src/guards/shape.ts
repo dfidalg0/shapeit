@@ -4,6 +4,8 @@ import { ValidationErrors } from '../types/validation';
 import { resolveGuard, isPlainRecord } from '../utils/guards';
 import { errorMessage } from '../utils/messages';
 
+export = shape;
+
 /**
  * Makes a guard for an object. Types can be specified with other guards or
  * primitive names.
@@ -21,7 +23,7 @@ import { errorMessage } from '../utils/messages';
  *   console.error(isValidData.errors); // Errors found
  * }
  */
-export = function shape<V extends GuardSchema>(
+function shape<V extends GuardSchema>(
     schema: V, strict = true
 ) {
     const guardsMap = reduce(schema, (res, val, key) => {

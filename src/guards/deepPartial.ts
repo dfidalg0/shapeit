@@ -5,10 +5,12 @@ import { isShapeGuard } from '../utils/guards';
 import oneOf from './oneOf';
 import shape from './shape';
 
+export = deepPartial;
+
 /**
  * Creates a shape where all object nested keys are optional
  */
-export = function deepPartial<G extends ShapeGuard>(guard: G) {
+function deepPartial<G extends ShapeGuard>(guard: G) {
     const { schema: baseSchema, strict } = guard._shape;
 
     const schema = reduce(baseSchema, (res, val, key) => {

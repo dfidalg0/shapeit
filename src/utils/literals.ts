@@ -10,7 +10,9 @@ import { BaseName, BaseType, Literal, LitType } from '../types/literals';
  *
  * $('boolean', $$(10, 11)); // Equivalent to `${boolean | 10 | 11}` in a literal type
  */
-export const $ = <T extends (BaseName | Literal)[]>(...values: T): LitType<T> => ({ types: values });
+export function $ <T extends (BaseName | Literal)[]>(...values: T): LitType<T> {
+    return { types: values };
+};
 
 /**
  * Creates a literal type part with a constant union
@@ -18,7 +20,9 @@ export const $ = <T extends (BaseName | Literal)[]>(...values: T): LitType<T> =>
  * @example
  * $$('id', 'ID'); // Equivalent to `${'id' | 'ID'}` in a literal type
  */
-export const $$ = <T extends BaseType[]>(...values: T): Literal<T> => ({ values: values });
+export function $$<T extends BaseType[]>(...values: T): Literal<T> {
+    return { values };
+};
 
 export function escapeRegex(string: string) {
     if (typeof string !== 'string') {
