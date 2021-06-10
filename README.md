@@ -178,3 +178,24 @@ validate(person, {
 ```
 
 This way, you can set schemas to validate all your incoming data with typesafety and get error messages matching the fields of your object.
+
+### Literals
+
+shapeit now has support for Typescript literal types (requires Typescript 4.1)
+
+```js
+const sp = require('shapeit');
+
+const idTemplate = sp.literal(sp.$$('alpha', 'beta'), sp.$('bigint'));
+
+const id = getIdFromSomewhere();
+
+if (idTemplate(id)) {
+    id; // id is now typed `alpha-${bigint}` | `beta-${bigint}`
+}
+else {
+    idTemplate.errors; // { '$': ["Invalid type provided. Expected: '(literal) ^(alpha|beta)(\\d+)$'"] }
+    // I didn't came with a better idea, so I just printed the regex
+    // used for validation.
+}
+```
