@@ -44,17 +44,20 @@ function shape<V extends GuardSchema>(
                 return false;
             }
 
+            let result = true;
+            let errors: Exclude<ValidationErrors, null> = {};
+
             if (strict) {
                 const extraneousKeys = Object.keys(omit(input, keys));
 
                 if (extraneousKeys.length) {
-                    isValid.errors = extraneousKeys.reduce((res, key) => {
+                    errors = extraneousKeys.reduce((res, key) => {
                         res[`$.${key}`] = [errorMessage('undefined')];
 
                         return res;
                     }, {} as Exclude<ValidationErrors, null>);
 
-                    return false;
+                    result = false;
                 }
             }
 
@@ -64,10 +67,6 @@ function shape<V extends GuardSchema>(
 
                     return [root, guardsMap[key], input[key]] as const;
                 });
-
-            const errors: Exclude<ValidationErrors, null> = {};
-
-            let result = true;
 
             for (const [root, guard, value] of entries) {
                 const current = guard(value);

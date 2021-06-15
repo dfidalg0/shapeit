@@ -39,8 +39,13 @@ export type GuardSchema<T extends Record<string, unknown> = Record<string, unkno
     [K in keyof T]: PrimitiveOrGuard<T[K]>;
 }
 
+type OnlyDef<V extends GuardSchema, K extends keyof V> = K extends any ? Guard<undefined> extends V[K] ? never : K : never;
+type OnlyUndef<V extends GuardSchema, K extends keyof V> = K extends any ? Guard<undefined> extends V[K] ? K : never : never;
+
 export type UnshapeSchema<V extends GuardSchema> = {
-    [K in keyof V]: GuardType<V[K]>;
+    [K in OnlyDef<V, keyof V>]: GuardType<V[K]>;
+} & {
+    [K in OnlyUndef<V, keyof V>]?: Guard<undefined> extends V[K] ? GuardType<V[K]> : unknown;
 }
 
 export type UnshapeTuple<T extends readonly PrimitiveOrGuard<unknown>[]> = {

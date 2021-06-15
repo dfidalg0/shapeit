@@ -13,7 +13,7 @@ type Narrowable =
     | bigint
     | boolean;
 
-type Narrow<A> = Cast<A,
+type Narrow<A> = A extends (...args: any) => any ? never : Cast<A,
     | []
     | (A extends Narrowable ? A : never)
     | ({ [K in keyof A]: Narrow<A[K]> })
@@ -37,6 +37,12 @@ type Narrow<A> = Cast<A,
  * }
  */
 function narrow <T, U extends Narrow<T>[]> (...targets: U): Guard<U[number]> {
+    targets = targets.filter(t => typeof t !== 'function') as U;
+
+    if (!targets.length) {
+        throw new Error('No valid narrowable objects provided');
+    }
+
     if (targets.length === 1) {
         const target = targets[0];
 
@@ -70,8 +76,8 @@ function genType(target: unknown) {
         if (['null', 'undefined'].includes(type))
             return type;
 
-        if (['symbol', 'function'].includes(type))
-            return `(${type})`;
+        if (type === 'symbol')
+            return `(symbol)`;
 
         return `(${type}) ${target}`;
     }
