@@ -4,8 +4,8 @@
   "description": "Object validation tools for Javascript and, specially, Typescript",
   "main": "index.js",
   "scripts": {
-    "release": "npm run build && npm publish dist",
-    "build": "tsc --build && cp package.json README.md LICENSE ./dist",
+    "release": "node scripts/release.js",
+    "build": "node scripts/build.js",
     "test": "jest --verbose"
   },
   "repository": {
