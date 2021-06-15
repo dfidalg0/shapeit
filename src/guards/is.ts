@@ -22,12 +22,9 @@ function is<T extends Primitive>(target: T) {
         (input: unknown): input is FromPrimitive<T> => {
             let result: boolean;
 
-            if (target === 'null') {
-                result = input === null;
-            }
-            else {
-                result = typeof input === target;
-            }
+            const type = input === null ? 'null' : typeof input;
+
+            result = type === target;
 
             isValid.errors = result ? null : {
                 $: [errorMessage(target)]
