@@ -1,4 +1,5 @@
 import { Guard } from '../types/guards';
+import { ValidationErrors } from '../types/validation';
 import { errorMessage } from '../utils/messages';
 
 export = custom;
@@ -16,18 +17,38 @@ export = custom;
  * });
  */
 function custom<T>(name: string, validator: (input: unknown) => input is T) {
-    const isValid: Guard<T> = Object.assign(
+    let errors: ValidationErrors = null;
+    let override = false;
+
+    const isValid = <Guard<T>> Object.defineProperties(
         (input: unknown): input is T => {
+            override = false;
+
             const result = validator(input);
 
-            isValid.errors = result ? null : {
-                $: [errorMessage(name)]
-            };
+            if (!override) {
+                errors = result ? null : {
+                    $: [errorMessage(name)]
+                };
+            }
+
+            if (result && override) {
+                console.warn(`[Shapeit Warning] custom guard ${name} error was set when input was valid`);
+            }
 
             return result;
-        },
-        { errors: null }
-    )
+        }, {
+            errors: {
+                get() {
+                    return errors;
+                },
+                set (err) {
+                    errors = err;
+                    override = true;
+                }
+            }
+        }
+    );
 
     return isValid;
 }
