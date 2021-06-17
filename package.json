@@ -6,7 +6,8 @@
   "scripts": {
     "release": "node scripts/release.js",
     "build": "node scripts/build.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "test:watch": "jest --watch --no-coverage"
   },
   "repository": {
     "type": "git",

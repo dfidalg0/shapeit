@@ -36,7 +36,7 @@ function custom<T>(name: string, validator: (input: unknown) => input is T) {
                 console.warn(`[Shapeit Warning] custom guard ${name} error was set when input was valid`);
             }
             else if (override && !result && !errors) {
-                console.warn(`[Shapeit Warning] custom guard ${name} error was set to null when input was valid`);
+                console.warn(`[Shapeit Warning] custom guard ${name} error was set to null when input was not valid`);
             }
 
             return result;
@@ -45,7 +45,7 @@ function custom<T>(name: string, validator: (input: unknown) => input is T) {
                 get() {
                     return errors;
                 },
-                set (err) {
+                set (err: ValidationErrors) {
                     errors = err;
                     override = true;
                 }
