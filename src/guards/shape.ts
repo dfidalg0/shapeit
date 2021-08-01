@@ -1,4 +1,5 @@
-import { reduce, omit } from 'lodash';
+import reduce from 'lodash/reduce';
+import omit from 'lodash/omit';
 import { GuardSchema, Guard, ShapeGuard, UnshapeSchema } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
 import { resolveGuard, isPlainRecord } from '../utils/guards';

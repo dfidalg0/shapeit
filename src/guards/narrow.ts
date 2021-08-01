@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { Guard } from '../types/guards';
 import { errorMessage } from '../utils/messages';
 import oneOf from './oneOf';

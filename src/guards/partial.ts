@@ -1,4 +1,4 @@
-import { reduce } from 'lodash';
+import reduce from 'lodash/reduce';
 import { ShapeGuard, GuardSchema, GuardType } from '../types/guards';
 import oneOf from './oneOf';
 import shape from './shape';

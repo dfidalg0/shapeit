@@ -1,4 +1,4 @@
-import { reduce } from 'lodash';
+import reduce from 'lodash/reduce';
 import { ShapeGuard, GuardSchema, GuardType } from '../types/guards';
 import { DeepPartial } from '../types/utils';
 import { isShapeGuard } from '../utils/guards';
