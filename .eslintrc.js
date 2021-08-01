@@ -17,7 +17,8 @@ const config = {
         sourceType: 'module'
     },
     plugins: [
-        '@typescript-eslint'
+        '@typescript-eslint',
+        'lodash',
     ],
     rules: {
         '@typescript-eslint/no-explicit-any': 'off',
@@ -41,6 +42,7 @@ const config = {
             'error',
             'always'
         ],
+        'lodash/import-scope': 'error',
         'eqeqeq': 'error',
         'no-var': 'error',
     },
@@ -49,6 +51,12 @@ const config = {
             files: '*.js',
             rules: {
                 '@typescript-eslint/no-var-requires': 'off'
+            }
+        },
+        {
+            files: ['tests/**', 'scripts/**'],
+            rules: {
+                'lodash/import-scope': 'off'
             }
         }
     ]

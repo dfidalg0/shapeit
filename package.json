@@ -1,6 +1,6 @@
 {
   "name": "shapeit",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "description": "Object validation tools for Javascript and, specially, Typescript",
   "main": "index.js",
   "scripts": {
@@ -35,6 +35,7 @@
     "@typescript-eslint/parser": "^4.28.5",
     "compare-versions": "^3.6.0",
     "eslint": "^7.32.0",
+    "eslint-plugin-lodash": "^7.2.0",
     "faker": "^5.5.3",
     "jest": "^27.0.4",
     "ts-jest": "^27.0.3",
