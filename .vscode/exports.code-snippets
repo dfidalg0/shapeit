@@ -19,5 +19,19 @@
         "scope": "typescript",
         "prefix": "expd",
         "body": "export { default as $1 } from './$1';"
+    },
+
+    "Markdown details": {
+        "scope": "markdown",
+        "prefix": "details",
+        "body": [
+            "<details>",
+            "<summary>",
+            "    <code>$1</code>",
+            "</summary>",
+            "",
+            "$2",
+            "</details>"
+        ]
     }
 }
