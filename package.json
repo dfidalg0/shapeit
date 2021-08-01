@@ -7,6 +7,7 @@
     "release": "node scripts/release.js",
     "build": "node scripts/build.js",
     "test": "jest --verbose",
+    "lint": "eslint src/**/*.ts",
     "test:watch": "jest --watch --no-coverage"
   },
   "repository": {
@@ -30,6 +31,10 @@
     "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.170",
     "@types/node": "^15.12.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
+    "compare-versions": "^3.6.0",
+    "eslint": "^7.32.0",
     "faker": "^5.5.3",
     "jest": "^27.0.4",
     "ts-jest": "^27.0.3",

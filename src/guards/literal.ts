@@ -49,7 +49,7 @@ function literal<T extends Template>(...template: T) {
     );
 
     return isValid;
-};
+}
 
 function resolveLiterals(literals: (BaseName | Literal)[]) {
     const match = literals.map(lit => {

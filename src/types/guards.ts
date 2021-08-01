@@ -32,8 +32,9 @@ export type PrimitiveOrGuard<T> = Primitive | Guard<T>;
  * Function to Extract type from a guard
  */
 export type GuardType<G extends PrimitiveOrGuard<unknown>> =
-    G extends Guard<infer T> ? T :
-    G extends Primitive ? FromPrimitive<G> : never;
+    G extends Guard<infer T>
+        ? T
+        : G extends Primitive ? FromPrimitive<G> : never;
 
 export type GuardSchema<T extends Record<string, unknown> = Record<string, unknown>> = {
     [K in keyof T]: PrimitiveOrGuard<T[K]>;
@@ -49,6 +50,7 @@ export type UnshapeSchema<V extends GuardSchema> = {
 }
 
 export type UnshapeTuple<T extends readonly PrimitiveOrGuard<unknown>[]> = {
-    [K in keyof T]: T[K] extends PrimitiveOrGuard<unknown> ?
-    GuardType<T[K]> : T[K];
+    [K in keyof T]: T[K] extends PrimitiveOrGuard<unknown>
+        ? GuardType<T[K]>
+        : T[K];
 }

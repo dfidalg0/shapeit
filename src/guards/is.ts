@@ -20,11 +20,9 @@ export = is;
 function is<T extends Primitive>(target: T) {
     const isValid: Guard<FromPrimitive<T>> = Object.assign(
         (input: unknown): input is FromPrimitive<T> => {
-            let result: boolean;
-
             const type = input === null ? 'null' : typeof input;
 
-            result = type === target;
+            const result = type === target;
 
             isValid.errors = result ? null : {
                 $: [errorMessage(target)]

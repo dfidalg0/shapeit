@@ -79,7 +79,7 @@ function createAsserter() {
         if (!cond) errors.push(msg);
 
         return cond;
-    ;}
+    };
 
     return [assert, errors] as const;
 }

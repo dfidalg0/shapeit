@@ -12,7 +12,7 @@ import { BaseName, BaseType, Literal, LitType } from '../types/literals';
  */
 export function $ <T extends (BaseName | Literal)[]>(...values: T): LitType<T> {
     return { types: values };
-};
+}
 
 /**
  * Creates a literal type part with a constant union
@@ -22,7 +22,7 @@ export function $ <T extends (BaseName | Literal)[]>(...values: T): LitType<T> {
  */
 export function $$<T extends BaseType[]>(...values: T): Literal<T> {
     return { values };
-};
+}
 
 export function escapeRegex(string: string) {
     if (typeof string !== 'string') {

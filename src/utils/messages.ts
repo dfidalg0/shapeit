@@ -1,7 +1,5 @@
-export function errorMessage(typename: string) {
-    return `Invalid type provided. Expected: '${typename}'`;
-}
+import { config } from '..';
 
-export function sizeErrorMessage(size: number | string) {
-    return `Invalid size provided. Expected: ${size}`;
-}
+export const errorMessage = (typename: string) => config.get('errorMessage')(typename);
+
+export const sizeErrorMessage = (size: string | number) => config.get('sizeErrorMessage')(size);

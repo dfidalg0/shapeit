@@ -7,13 +7,13 @@ export type Primitive =
     | 'bigint' | 'object' | 'symbol'
     | 'null' | 'undefined';
 
-export type FromPrimitive<T extends Primitive> =
-    T extends 'number' ? number :
-    T extends 'string' ? string :
-    T extends 'boolean' ? boolean :
-    T extends 'bigint' ? bigint :
-    T extends 'object' ? object :
-    T extends 'symbol' ? symbol :
-    T extends 'null' ? null :
-    T extends 'undefined' ? undefined :
-    never
+export type FromPrimitive<T extends Primitive> = {
+    number: number;
+    string: string;
+    boolean: boolean;
+    bigint: bigint;
+    object: object;
+    symbol: symbol;
+    null: null;
+    undefined: undefined;
+}[T];
