@@ -1,4 +1,9 @@
 # shapeit
+
+[![GitHub license](https://img.shields.io/badge/license-MIT-red.svg)](https://github.com/diegood12/shapeit/blob/main/LICENSE)
+[![Github Actions](https://github.com/diegood12/shapeit/actions/workflows/test.yml/badge.svg)](https://github.com/diegood12/shapeit/actions)
+[![npm version](https://img.shields.io/npm/v/shapeit.svg)](https://www.npmjs.com/package/shapeit)
+
 shapeit is an object validation tools for Javascript and, specially, Typescript. With it, you can ensure any javascript object has a provided shape corresponding to a typescript type. You can also do asynchronous data validation of any nested object and get decent error messages.
 
 ## Usage
