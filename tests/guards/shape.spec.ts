@@ -51,8 +51,6 @@ describe('Shape guard', () => {
             number: 'number'
         });
 
-        const validInput = pick(data, 'string', 'number');
-
         const invalidInputs = [
             { string: faker.datatype.number(), number: faker.datatype.number() },
             { string: faker.datatype.string(), number: faker.datatype.string() },

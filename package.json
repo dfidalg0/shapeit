@@ -7,7 +7,7 @@
     "release": "node scripts/release.js",
     "build": "node scripts/build.js",
     "test": "jest --verbose",
-    "lint": "eslint src/**/*.ts",
+    "lint": "eslint .",
     "test:watch": "jest --watch --no-coverage"
   },
   "repository": {

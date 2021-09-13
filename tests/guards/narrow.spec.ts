@@ -5,7 +5,7 @@ describe('Narrow guard', () => {
     it('checks if an input matches a set of values', () => {
         const data = genData();
 
-        const [invalid, ...valid] = Object.values(data)
+        const [invalid, ...valid] = Object.values(data);
 
         const guard = narrow(...valid);
 

@@ -17,7 +17,7 @@ describe('Union guard (oneOf)', () => {
                 errorMessage('string'),
                 errorMessage('boolean')
             ])
-        })
+        });
     });
 
     it('validates an union of two guards', () => {
@@ -39,7 +39,7 @@ describe('Union guard (oneOf)', () => {
                 errorMessage('bigint'),
                 errorMessage('symbol')
             ])
-        })
+        });
     });
 
     it('throws an error when no guards are provided', () => {
