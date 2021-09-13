@@ -18,6 +18,7 @@ const config = {
     },
     plugins: [
         '@typescript-eslint',
+        'import',
         'lodash',
     ],
     rules: {
@@ -45,6 +46,7 @@ const config = {
         'lodash/import-scope': 'error',
         'eqeqeq': 'error',
         'no-var': 'error',
+        // 'import/extensions': ['error', 'always']
     },
     overrides: [
         {
@@ -56,7 +58,9 @@ const config = {
         {
             files: ['tests/**', 'scripts/**'],
             rules: {
-                'lodash/import-scope': 'off'
+                'lodash/import-scope': 'off',
+                '@typescript-eslint/no-empty-function': 'off',
+                // 'import/extensions': 'off'
             }
         }
     ]

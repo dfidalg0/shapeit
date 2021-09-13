@@ -3,9 +3,9 @@ export type DeepPartial<T> = {
 };
 
 export type Primitive =
-    | 'number' | 'string' | 'boolean'
-    | 'bigint' | 'object' | 'symbol'
-    | 'null' | 'undefined';
+    | 'number'  | 'string' | 'boolean'
+    | 'bigint'  | 'object' | 'symbol'
+    | 'function'| 'null'   | 'undefined';
 
 export type FromPrimitive<T extends Primitive> = {
     number: number;
@@ -14,6 +14,7 @@ export type FromPrimitive<T extends Primitive> = {
     bigint: bigint;
     object: object;
     symbol: symbol;
+    function: Function;
     null: null;
     undefined: undefined;
 }[T];
