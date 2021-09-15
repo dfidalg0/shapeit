@@ -1,6 +1,6 @@
 # shapeit
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-red.svg)](https://github.com/diegood12/shapeit/blob/main/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/diegood12/shapeit?color=brightgreen)](https://github.com/diegood12/shapeit/blob/main/LICENSE)
 [![Github Actions](https://github.com/diegood12/shapeit/actions/workflows/test.yml/badge.svg)](https://github.com/diegood12/shapeit/actions)
 [![npm version](https://img.shields.io/npm/v/shapeit.svg)](https://www.npmjs.com/package/shapeit)
 
@@ -537,3 +537,11 @@ Shorthand for <code>oneOf(guard, 'undefined');</code>
 </summary>
 Shorthand for <code>oneOf(guard, 'null');</code>
 </details>
+
+## Roadmap
+
+* Add ESM support
+* Improve the validation API
+* Add validation mechanism to the guards API directly
+* Improve docs
+* Release v1.0
