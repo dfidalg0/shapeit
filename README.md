@@ -6,6 +6,11 @@
 
 shapeit is an object validation tools for Javascript and, specially, Typescript. With it, you can ensure any javascript object has a provided shape corresponding to a typescript type. You can also do asynchronous data validation of any nested object and get decent error messages.
 
+### **NOTE**: Breaking changes on 0.5
+
+* Importing `shapeit`'s subfolders won't work anymore.
+    * Fix: If you had any import like `import { ... } from 'shapeit/...';`, import it directly from `'shapeit'`.
+
 ## Usage
 
 shapeit consists of two different parts.
@@ -540,7 +545,7 @@ Shorthand for <code>oneOf(guard, 'null');</code>
 
 ## Roadmap
 
-* Add ESM support
+* ~~Add ESM support~~ 🎉
 * Improve the validation API
 * Add validation mechanism to the guards API directly
 * Improve docs
