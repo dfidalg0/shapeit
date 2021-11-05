@@ -43,10 +43,12 @@ const config = {
             'error',
             'always'
         ],
-        'lodash/import-scope': 'error',
+        'lodash/import-scope': [
+            'error',
+            'method-package',
+        ],
         'eqeqeq': 'error',
         'no-var': 'error',
-        // 'import/extensions': ['error', 'always']
     },
     overrides: [
         {
@@ -60,7 +62,6 @@ const config = {
             rules: {
                 'lodash/import-scope': 'off',
                 '@typescript-eslint/no-empty-function': 'off',
-                // 'import/extensions': 'off'
             }
         }
     ]

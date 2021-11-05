@@ -1,11 +1,7 @@
-import reduce from 'lodash/reduce';
-import omit from 'lodash/omit';
 import { GuardSchema, Guard, ShapeGuard, UnshapeSchema } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
 import { resolveGuard, isPlainRecord } from '../utils/guards';
 import { errorMessage } from '../utils/messages';
-
-export = shape;
 
 /**
  * Makes a guard for an object. Types can be specified with other guards or
@@ -24,10 +20,10 @@ export = shape;
  *   console.error(isValidData.errors); // Errors found
  * }
  */
-function shape<V extends GuardSchema>(
+export default function shape<V extends GuardSchema>(
     schema: V, strict = true
 ) {
-    const guardsMap = reduce(schema, (res, val, key) => {
+    const guardsMap = Object.entries(schema).reduce((res, [key, val]) => {
         res[key] = resolveGuard(val);
 
         return res;
@@ -100,4 +96,12 @@ function shape<V extends GuardSchema>(
     );
 
     return isValid;
+}
+
+function omit<T extends object, K extends (keyof T)[]>(obj: T, keys: K): Omit<T, K[number]> {
+    const clone = { ...obj } as Omit<T, K[number]>;
+
+    for (const key of keys) delete clone[key as never];
+
+    return clone;
 }

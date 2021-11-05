@@ -2,12 +2,18 @@
   "include": ["src"],
   "compilerOptions": {
     "target": "es2020",
-    "module": "commonjs",
+    "module": "ES2020",
+    "moduleResolution": "node",
     "lib": [],
+    "baseUrl": ".",
+    "paths": {
+        "@/*": ["./src/*"]
+    },
     "allowJs": false,
     "checkJs": false,
     "declaration": true,
-    "outDir": "./dist",
+    "emitDeclarationOnly": true,
+    "outDir": "./dist/types",
     "rootDir": "./src",
     "strict": true,
     "allowSyntheticDefaultImports": true,

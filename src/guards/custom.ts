@@ -2,8 +2,6 @@ import { Guard } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
 import { errorMessage } from '../utils/messages';
 
-export = custom;
-
 /**
  * Creates a custom type from a typeguard function
  *
@@ -16,7 +14,7 @@ export = custom;
  *   return result;
  * });
  */
-function custom<T>(name: string, validator: (input: unknown) => input is T) {
+export default function custom<T>(name: string, validator: (input: unknown) => input is T) {
     let errors: ValidationErrors = null;
     let override = false;
 

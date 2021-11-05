@@ -3,8 +3,6 @@ import { ValidationErrors } from '../types/validation';
 import { resolveGuard } from '../utils/guards';
 import { errorMessage, sizeErrorMessage } from '../utils/messages';
 
-export = arrayOf;
-
 /**
  * Creates an array shape where all elements must have the same type
  *
@@ -19,7 +17,7 @@ export = arrayOf;
  *   })
  * );
  */
-function arrayOf<T extends PrimitiveOrGuard<unknown>>(
+export default function arrayOf<T extends PrimitiveOrGuard<unknown>>(
     type: T, maxLength = Infinity
 ) {
     const guard = resolveGuard(type);

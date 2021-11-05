@@ -2,8 +2,6 @@ import { Guard } from '../types/guards';
 import { FromPrimitive, Primitive } from '../types/utils';
 import { errorMessage } from '../utils/messages';
 
-export = is;
-
 /**
  * Basic Guard creator from a primitive name.
  *
@@ -17,7 +15,7 @@ export = is;
  *     console.error(isString.errors); // Errors found
  * }
  */
-function is<T extends Primitive>(target: T) {
+export default function is<T extends Primitive>(target: T) {
     const isValid: Guard<FromPrimitive<T>> = Object.assign(
         (input: unknown): input is FromPrimitive<T> => {
             const type = input === null ? 'null' : typeof input;

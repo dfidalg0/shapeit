@@ -1,9 +1,6 @@
-import reduce from 'lodash/reduce';
 import { ShapeGuard, GuardSchema, GuardType } from '../types/guards';
 import oneOf from './oneOf';
 import shape from './shape';
-
-export = partial;
 
 /**
  * Creates a shape where all object keys are optional.
@@ -11,10 +8,10 @@ export = partial;
  * This is NOT valid for nested keys inside objects. If you really need it, use
  * deepPartial instead
  */
-function partial<T extends ShapeGuard>(guard: T) {
+export default function partial<T extends ShapeGuard>(guard: T) {
     const { schema: baseSchema, strict } = guard._shape;
 
-    const schema = reduce(baseSchema, (res, val, key) => {
+    const schema = Object.entries(baseSchema).reduce((res, [key, val]) => {
         res[key] = oneOf(val, 'undefined');
 
         return res;

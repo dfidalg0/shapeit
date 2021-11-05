@@ -3,8 +3,6 @@ import { ValidationErrors } from '../types/validation';
 import { resolveGuard } from '../utils/guards';
 import { errorMessage, sizeErrorMessage } from '../utils/messages';
 
-export = tuple;
-
 /**
  * Creates a guard for a tuple type. The order of the arguments is the same
  * as the type order of the tuple
@@ -16,7 +14,7 @@ export = tuple;
  *   input; // Typed as [string, number]
  * }
  */
-function tuple<T extends PrimitiveOrGuard<unknown>[]>(...types: T) {
+export default function tuple<T extends PrimitiveOrGuard<unknown>[]>(...types: T) {
     const guards = types.map(resolveGuard);
 
     const isValid: Guard<UnshapeTuple<T>> = Object.assign(

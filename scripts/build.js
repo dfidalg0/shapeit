@@ -6,6 +6,7 @@ const { omit } = require('lodash');
 
 process.chdir(path.join(__dirname, '..'));
 
+run('vite', 'build');
 run('tsc', '--build');
 
 const data = omit(package, 'scripts');

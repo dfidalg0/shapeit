@@ -3,8 +3,6 @@ import { Template, Concat, BaseName, Literal } from '../types/literals';
 import { errorMessage } from '../utils/messages';
 import { escapeRegex } from '../utils/literals';
 
-export = literal;
-
 /**
  * Creates a guard for a template literal type
  *
@@ -15,7 +13,7 @@ export = literal;
  *   input; // input is typed as `id-${bigint}`
  * }
  */
-function literal<T extends Template>(...template: T) {
+export default function literal<T extends Template>(...template: T) {
     let regexString = '^';
 
     for (const item of template) {

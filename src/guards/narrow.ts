@@ -1,9 +1,7 @@
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash.isequal';
 import { Guard } from '../types/guards';
 import { errorMessage } from '../utils/messages';
 import oneOf from './oneOf';
-
-export = narrow;
 
 type Cast<A, B> = A extends B ? A : B;
 
@@ -36,7 +34,7 @@ type Narrow<A> = A extends (...args: any) => any ? never : Cast<A,
  *   input; // typed as 'a' | 'b'
  * }
  */
-function narrow <T, U extends Narrow<T>[]> (...targets: U): Guard<U[number]> {
+export default function narrow <T, U extends Narrow<T>[]> (...targets: U): Guard<U[number]> {
     targets = targets.filter(t => typeof t !== 'function') as U;
 
     if (!targets.length) {
