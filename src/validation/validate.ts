@@ -1,7 +1,8 @@
-import { Validator, ValidationResult } from '../types/validation';
+import { NonEmptyArray } from '../types/utils';
+import { RulesSet, ValidationResult } from '../types/validation';
 
 /**
- * Creates an asynchronous validator for any object from a set of rules.
+ * Validates an object against one or multiple sets of rules.
  *
  * A set of rules can be
  *
@@ -10,7 +11,7 @@ import { Validator, ValidationResult } from '../types/validation';
  * 2. A validation object containing some of the input's keys, each one matching
  *    a set of rules for the corresponding key on the input
  *
- * 3. An array containing the validation function and the validation object
+ * 3. An array containing multiple sets of rules
  *
  * @example
  * const number = 10;
@@ -58,11 +59,18 @@ import { Validator, ValidationResult } from '../types/validation';
  * ]);
  */
 export default async function validate<T>(
-    input: T, rules: Validator<T>
+    input: T, ...rules: NonEmptyArray<RulesSet<T>>
 ): Promise<ValidationResult> {
     const errors: Record<string, string[]> = {};
 
-    await recursion(input, rules, '$', errors);
+    if (!rules.length) {
+        throw new Error('No rule specified');
+    }
+
+    // This avoids an unnecessary level of recursion
+    const rulesSet = rules.length > 1 ? rules : rules[0];
+
+    await applyRulesRecursively(input, rulesSet, '$', errors);
 
     return Object.keys(errors).length ? {
         valid: false, errors
@@ -84,9 +92,11 @@ function createAsserter() {
     return [assert, errors] as const;
 }
 
-async function recursion<T>(
-    input: T, rules: Validator<T>,
-    path: string, errors: Record<string, string[]>
+async function applyRulesRecursively<T>(
+    input: T,
+    rules: RulesSet<T>,
+    path: string,
+    errors: Record<string, string[]>
 ): Promise<void> {
     if (typeof rules === 'function') {
         const isValid = rules;
@@ -96,7 +106,7 @@ async function recursion<T>(
         await isValid(input, assert);
 
         if (assertionErrors.length) {
-            errors[path] = assertionErrors;
+            (errors[path] ||= []).push(...assertionErrors);
         }
     }
     else {
@@ -104,12 +114,12 @@ async function recursion<T>(
 
         if (Array.isArray(rules)) {
             promises = rules.map(
-                rule => recursion(input, rule, path, errors)
+                rule => applyRulesRecursively(input, rule, path, errors)
             );
         }
         else if (Array.isArray(input) && '$each' in rules) {
-            promises = input.map((v, i) => recursion(
-                v, (rules as any).$each, `${path}.${i}`, errors
+            promises = input.map((v, i) => applyRulesRecursively(
+                v, rules.$each, `${path}.${i}`, errors
             ));
         }
         else if (typeof input === 'object' && input !== null) {
@@ -117,8 +127,7 @@ async function recursion<T>(
 
             promises = keys
                 .filter(key => key in input)
-                .map(key => recursion(
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .map(key => applyRulesRecursively(
                     input[key], (rules as any)[key],
                     `${path}.${key}`, errors
                 ));

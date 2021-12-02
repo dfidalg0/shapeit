@@ -58,12 +58,7 @@ export default function arrayOf<T extends PrimitiveOrGuard<unknown>>(
 
                     const path = subpath.replace('$', root);
 
-                    if (errors[path]) {
-                        errors[path].push(...messages);
-                    }
-                    else {
-                        errors[path] = [...messages];
-                    }
+                    (errors[path] ||= []).push(...messages || []);
                 }
             }
         }

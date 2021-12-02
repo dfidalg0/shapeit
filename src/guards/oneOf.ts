@@ -33,12 +33,7 @@ export default function oneOf<T extends PrimitiveOrGuard<unknown>[]>(...types: T
                 for (const guard of guards) {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     for (const [path, guardErrors] of Object.entries(guard.errors!)) {
-                        if (!errors[path]) {
-                            errors[path] = guardErrors;
-                        }
-                        else {
-                            errors[path].push(...guardErrors);
-                        }
+                        (errors[path] ||= []).push(...guardErrors || []);
                     }
                 }
 

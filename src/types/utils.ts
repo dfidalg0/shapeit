@@ -18,3 +18,5 @@ export type FromPrimitive<T extends Primitive> = {
     null: null;
     undefined: undefined;
 }[T];
+
+export type NonEmptyArray<T> = T[] & { 0: T };

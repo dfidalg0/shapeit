@@ -52,12 +52,7 @@ export default function tuple<T extends PrimitiveOrGuard<unknown>[]>(...types: T
 
                         const path = subpath.replace('$', root);
 
-                        if (errors[path]) {
-                            errors[path].push(...messages);
-                        }
-                        else {
-                            errors[path] = [...messages];
-                        }
+                        (errors[path] ||= []).push(...messages || []);
                     }
                 }
             }

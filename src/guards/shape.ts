@@ -74,12 +74,7 @@ export default function shape<V extends GuardSchema>(
                     for (const [subpath, messages] of Object.entries(guard.errors)) {
                         const path = subpath.replace('$', root);
 
-                        if (errors[path]) {
-                            errors[path].push(...messages);
-                        }
-                        else {
-                            errors[path] = [...messages];
-                        }
+                        (errors[path] ||= []).push(...messages || []);
                     }
                 }
             }

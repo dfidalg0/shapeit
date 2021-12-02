@@ -1,57 +1,56 @@
 {
-  "name": "shapeit",
-  "version": "0.5.0",
-  "description": "Object validation tools for Javascript and, specially, Typescript",
-  "main": "shapeit.umd.js",
-  "module": "shapeit.es.mjs",
-  "types": "types/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./shapeit.es.mjs",
-      "require": "./shapeit.umd.js"
+    "name": "shapeit",
+    "version": "0.5.1",
+    "description": "Object validation tools for Javascript and, specially, Typescript",
+    "main": "shapeit.umd.js",
+    "module": "shapeit.es.mjs",
+    "types": "types/index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./shapeit.es.mjs",
+            "require": "./shapeit.umd.js"
+        }
+    },
+    "scripts": {
+        "release": "node scripts/release.js",
+        "build": "node scripts/build.js",
+        "test": "jest --verbose",
+        "lint": "eslint .",
+        "test:watch": "jest --watch --no-coverage"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/diegood12/shapeit.git"
+    },
+    "keywords": [
+        "typeguards",
+        "validation",
+        "typesafety",
+        "form validation"
+    ],
+    "author": "Diego Fidalgo",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/diegood12/shapeit/issues"
+    },
+    "homepage": "https://github.com/diegood12/shapeit#readme",
+    "devDependencies": {
+        "@types/faker": "^5.5.9",
+        "@types/jest": "^27.0.2",
+        "@types/lodash": "^4.14.176",
+        "@types/lodash.isequal": "^4.5.5",
+        "@typescript-eslint/eslint-plugin": "^5.3.0",
+        "@typescript-eslint/parser": "^5.3.0",
+        "compare-versions": "^4.0.1",
+        "eslint": "^8.1.0",
+        "eslint-plugin-import": "^2.25.2",
+        "eslint-plugin-lodash": "^7.3.0",
+        "faker": "^5.5.3",
+        "jest": "^27.3.1",
+        "lodash": "^4.17.21",
+        "lodash.isequal": "^4.5.0",
+        "ts-jest": "^27.0.7",
+        "typescript": "^4.4.4",
+        "vite": "^2.6.13"
     }
-  },
-  "scripts": {
-    "release": "node scripts/release.js",
-    "build": "node scripts/build.js",
-    "test": "jest --verbose",
-    "lint": "eslint .",
-    "test:watch": "jest --watch --no-coverage"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/diegood12/shapeit.git"
-  },
-  "keywords": [
-    "typeguards",
-    "validation",
-    "typesafety",
-    "form validation"
-  ],
-  "author": "Diego Fidalgo",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/diegood12/shapeit/issues"
-  },
-  "homepage": "https://github.com/diegood12/shapeit#readme",
-  "devDependencies": {
-    "@types/faker": "^5.5.9",
-    "@types/jest": "^27.0.2",
-    "@types/lodash": "^4.14.176",
-    "@types/lodash.isequal": "^4.5.5",
-    "@types/node": "^16.11.6",
-    "@typescript-eslint/eslint-plugin": "^5.3.0",
-    "@typescript-eslint/parser": "^5.3.0",
-    "compare-versions": "^4.0.1",
-    "eslint": "^8.1.0",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-lodash": "^7.3.0",
-    "faker": "^5.5.3",
-    "jest": "^27.3.1",
-    "lodash": "^4.17.21",
-    "lodash.isequal": "^4.5.0",
-    "ts-jest": "^27.0.7",
-    "typescript": "^4.4.4",
-    "vite": "^2.6.13"
-  }
 }
