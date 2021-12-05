@@ -2,7 +2,8 @@ type Config = typeof config;
 
 const config = {
     errorMessage: (typename: string) => `Invalid type provided. Expected: '${typename}'`,
-    sizeErrorMessage: (size: number | string) => `Invalid size provided. Expected: ${size}`
+    sizeErrorMessage: (size: number | string) => `Invalid size provided. Expected: ${size}`,
+    showWarnings: true,
 };
 
 const defaults = { ...config };
