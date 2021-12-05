@@ -10,5 +10,7 @@ export { default as shape } from './shape';
 export { default as tuple } from './tuple';
 export { default as narrow } from './narrow';
 export { default as literal } from './literal';
+export { default as pick } from './pick';
+export { default as omit } from './omit';
 
 export { custom } from './guard';

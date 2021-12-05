@@ -515,6 +515,18 @@ const myCustomType = sp.custom(
 
 <details>
 <summary>
+    <code>pick(guard: Guard, keys: string[])</code>
+</summary>
+Creates a shape guard from an original shape by picking a set of its keys.
+</details>
+
+<summary>
+    <code>omit(guard: Guard, keys: string[])</code>
+</summary>
+Creates a shape guard from an original shape by omiting a set of its keys.
+</details>
+
+<summary>
     <code>partial(guard: Guard)</code>
 </summary>
 Creates a shape where all object keys are optional.
