@@ -1,12 +1,13 @@
 import { Guard } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
 import { errorMessage } from '../utils/messages';
+import { config } from '..';
 
 /**
- * Creates a custom type from a typeguard function
+ * Creates a guard from a typeguard function
  *
  * @example
- * const myCustomType = sp.custom('myCustomType', (input): input is MyCustomType => {
+ * const myCustomType = sp.guard('myCustomType', (input): input is MyCustomType => {
  *   let result : boolean;
  *
  *   // test if input is MyCustomType
@@ -14,7 +15,7 @@ import { errorMessage } from '../utils/messages';
  *   return result;
  * });
  */
-export default function custom<T>(name: string, validator: (input: unknown) => input is T) {
+export default function guard<T>(name: string, validator: (input: unknown) => input is T) {
     let errors: ValidationErrors = null;
     let override = false;
 
@@ -30,11 +31,13 @@ export default function custom<T>(name: string, validator: (input: unknown) => i
                 };
             }
 
-            if (override && result && errors) {
-                console.warn(`[Shapeit Warning] custom guard ${name} error was set when input was valid`);
-            }
-            else if (override && !result && !errors) {
-                console.warn(`[Shapeit Warning] custom guard ${name} error was set to null when input was not valid`);
+            if (config.get('showWarnings')) {
+                if (override && result && errors) {
+                    console.warn(`[Shapeit Warning] custom guard ${name} error was set when input was valid`);
+                }
+                else if (override && !result && !errors) {
+                    console.warn(`[Shapeit Warning] custom guard ${name} error was set to null when input was not valid`);
+                }
             }
 
             return result;
@@ -53,3 +56,10 @@ export default function custom<T>(name: string, validator: (input: unknown) => i
 
     return isValid;
 }
+
+/**
+ * This is an alias for sp.guard
+ *
+ * @alias guard
+ */
+export const custom = guard;

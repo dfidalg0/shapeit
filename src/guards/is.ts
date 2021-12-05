@@ -1,6 +1,5 @@
-import { Guard } from '../types/guards';
 import { FromPrimitive, Primitive } from '../types/utils';
-import { errorMessage } from '../utils/messages';
+import guard from './guard';
 
 /**
  * Basic Guard creator from a primitive name.
@@ -16,21 +15,11 @@ import { errorMessage } from '../utils/messages';
  * }
  */
 export default function is<T extends Primitive>(target: T) {
-    const isValid: Guard<FromPrimitive<T>> = Object.assign(
-        (input: unknown): input is FromPrimitive<T> => {
-            const type = input === null ? 'null' : typeof input;
+    const isValid = guard(target, (input): input is FromPrimitive<T> => {
+        const type = input === null ? 'null' : typeof input;
 
-            const result = type === target;
-
-            isValid.errors = result ? null : {
-                $: [errorMessage(target)]
-            };
-
-            return result;
-        }, {
-            errors: null
-        }
-    );
+        return type === target;
+    });
 
     return isValid;
 }

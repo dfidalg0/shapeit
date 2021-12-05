@@ -1,7 +1,6 @@
-import { Guard } from '../types/guards';
 import { Template, Concat, BaseName, Literal } from '../types/literals';
-import { errorMessage } from '../utils/messages';
 import { escapeRegex } from '../utils/literals';
+import guard from './guard';
 
 /**
  * Creates a guard for a template literal type
@@ -32,19 +31,11 @@ export default function literal<T extends Template>(...template: T) {
 
     const regex = new RegExp(regexString);
 
-    const isValid: Guard<Concat<T>> = Object.assign(
-        (input: unknown): input is Concat<T> => {
-            const result = Boolean(typeof input === 'string' && input.match(regex));
+    const typename = `(literal) ${regexString}`;
 
-            isValid.errors = result ? null : {
-                $: [errorMessage(`(literal) ${regexString}`)]
-            };
-
-            return result;
-        }, {
-            errors: null
-        }
-    );
+    const isValid = guard(typename, (input): input is Concat<T> => {
+        return Boolean(typeof input === 'string' && input.match(regex));
+    });
 
     return isValid;
 }

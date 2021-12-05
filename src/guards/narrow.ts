@@ -1,7 +1,7 @@
 import isEqual from 'lodash.isequal';
 import { Guard } from '../types/guards';
-import { errorMessage } from '../utils/messages';
 import oneOf from './oneOf';
+import guard from './guard';
 
 type Cast<A, B> = A extends B ? A : B;
 
@@ -46,20 +46,11 @@ export default function narrow <T, U extends Narrow<T>[]> (...targets: U): Guard
 
         const typename = genType(target);
 
-        const isValid: Guard<U[number]> = Object.assign(
-            (input: unknown): input is U[number] => {
-                const result = isEqual(input, target);
+        const isValid = guard(typename, (input): input is U[number] => {
+            const result = isEqual(input, target);
 
-                isValid.errors = result ? null : {
-                    $: [errorMessage(typename)]
-                };
-
-                return result;
-            },
-            {
-                errors: null
-            }
-        );
+            return result;
+        });
 
         return isValid;
     }

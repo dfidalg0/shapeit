@@ -2,6 +2,7 @@ import { GuardSchema, Guard, ShapeGuard, UnshapeSchema } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
 import { resolveGuard, isPlainRecord } from '../utils/guards';
 import { errorMessage } from '../utils/messages';
+import makeGuard from './guard';
 
 /**
  * Makes a guard for an object. Types can be specified with other guards or
@@ -32,12 +33,8 @@ export default function shape<V extends GuardSchema>(
     const keys = Object.keys(schema);
 
     const isValid: ShapeGuard<UnshapeSchema<V>> = Object.assign(
-        (input: unknown): input is UnshapeSchema<V> => {
+        makeGuard('object', (input: unknown): input is UnshapeSchema<V> => {
             if (!isPlainRecord(input)) {
-                isValid.errors = {
-                    $: [errorMessage('object')]
-                };
-
                 return false;
             }
 
@@ -82,11 +79,8 @@ export default function shape<V extends GuardSchema>(
             isValid.errors = result ? null : errors;
 
             return result;
-        }, {
-            errors: null,
-            _shape: {
-                schema, strict
-            }
+        }), {
+            _shape: { schema, strict }
         }
     );
 

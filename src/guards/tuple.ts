@@ -1,7 +1,8 @@
-import { PrimitiveOrGuard, Guard, UnshapeTuple } from '../types/guards';
+import { PrimitiveOrGuard, UnshapeTuple } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
 import { resolveGuard } from '../utils/guards';
-import { errorMessage, sizeErrorMessage } from '../utils/messages';
+import { sizeErrorMessage } from '../utils/messages';
+import makeGuard from './guard';
 
 /**
  * Creates a guard for a tuple type. The order of the arguments is the same
@@ -17,53 +18,45 @@ import { errorMessage, sizeErrorMessage } from '../utils/messages';
 export default function tuple<T extends PrimitiveOrGuard<unknown>[]>(...types: T) {
     const guards = types.map(resolveGuard);
 
-    const isValid: Guard<UnshapeTuple<T>> = Object.assign(
-        (input: unknown): input is UnshapeTuple<T> => {
-            if (!Array.isArray(input)) {
-                isValid.errors = {
-                    $: [errorMessage('tuple')]
-                };
+    const isValid = makeGuard('tuple', (input): input is UnshapeTuple<T> => {
+        if (!Array.isArray(input)) {
+            return false;
+        }
 
-                return false;
-            }
+        if (input.length !== guards.length) {
+            isValid.errors = {
+                $: [sizeErrorMessage(guards.length)]
+            };
 
-            if (input.length !== guards.length) {
-                isValid.errors = {
-                    $: [sizeErrorMessage(guards.length)]
-                };
+            return false;
+        }
 
-                return false;
-            }
+        const errors: Exclude<ValidationErrors, null> = {};
 
-            const errors: Exclude<ValidationErrors, null> = {};
+        let result = true;
 
-            let result = true;
+        for (let i = 0; i < input.length; ++i) {
+            const guard = guards[i];
 
-            for (let i = 0; i < input.length; ++i) {
-                const guard = guards[i];
+            const current = guard(input[i]);
 
-                const current = guard(input[i]);
+            result = result && current;
 
-                result = result && current;
+            if (guard.errors) {
+                for (const [subpath, messages] of Object.entries(guard.errors)) {
+                    const root = `$.${i}`;
 
-                if (guard.errors) {
-                    for (const [subpath, messages] of Object.entries(guard.errors)) {
-                        const root = `$.${i}`;
+                    const path = subpath.replace('$', root);
 
-                        const path = subpath.replace('$', root);
-
-                        (errors[path] ||= []).push(...messages || []);
-                    }
+                    (errors[path] ||= []).push(...messages || []);
                 }
             }
-
-            isValid.errors = result ? null : errors;
-
-            return result;
-        }, {
-            errors: null
         }
-    );
+
+        isValid.errors = result ? null : errors;
+
+        return result;
+    });
 
     return isValid;
 }

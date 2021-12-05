@@ -1,5 +1,5 @@
+export { default as guard } from './guard';
 export { default as arrayOf } from './arrayOf';
-export { default as custom } from './custom';
 export { default as deepPartial } from './deepPartial';
 export { default as is } from './is';
 export { default as maybe } from './maybe';
@@ -10,3 +10,5 @@ export { default as shape } from './shape';
 export { default as tuple } from './tuple';
 export { default as narrow } from './narrow';
 export { default as literal } from './literal';
+
+export { custom } from './guard';

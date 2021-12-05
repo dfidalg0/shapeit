@@ -1,7 +1,8 @@
-import { PrimitiveOrGuard, Guard, GuardType } from '../types/guards';
+import { PrimitiveOrGuard, GuardType } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
 import { resolveGuard } from '../utils/guards';
-import { errorMessage, sizeErrorMessage } from '../utils/messages';
+import { sizeErrorMessage } from '../utils/messages';
+import makeGuard from './guard';
 
 /**
  * Creates an array shape where all elements must have the same type
@@ -26,12 +27,8 @@ export default function arrayOf<T extends PrimitiveOrGuard<unknown>>(
         throw new Error('maxLength should be greater than 0');
     }
 
-    const isValid: Guard<GuardType<T>[]> = Object.assign((input: unknown): input is GuardType<T>[] => {
+    const isValid = makeGuard('array', (input): input is GuardType<T>[] => {
         if (!Array.isArray(input)) {
-            isValid.errors = {
-                $: [errorMessage('array')]
-            };
-
             return false;
         }
 
@@ -66,8 +63,6 @@ export default function arrayOf<T extends PrimitiveOrGuard<unknown>>(
         isValid.errors = result ? null : errors;
 
         return result;
-    }, {
-        errors: null
     });
 
     return isValid;
