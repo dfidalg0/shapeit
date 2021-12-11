@@ -309,6 +309,28 @@ else {
 
 <details>
 <summary>
+<code>instanceOf(constructor: GenericClass)</code>
+</summary>
+
+Creates a native instanceof guard. Can be useful when used in conjunction with other guards.
+```js
+class MyClass {
+  // My class code...
+}
+
+const isMyClass = instanceOf(MyClass);
+
+if (isMyClass(value)) {
+    doSomethingWith(value); // value is typed as MyClass
+}
+else {
+    console.error(isMyClass.errors); // Errors found
+}
+```
+</details>
+
+<details>
+<summary>
     <code>oneOf(...types: (Primitive | Guard)[])</code>
 </summary>
 

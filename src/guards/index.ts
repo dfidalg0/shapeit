@@ -12,5 +12,6 @@ export { default as narrow } from './narrow';
 export { default as literal } from './literal';
 export { default as pick } from './pick';
 export { default as omit } from './omit';
+export { default as instanceOf } from './instanceOf';
 
 export { custom } from './guard';
