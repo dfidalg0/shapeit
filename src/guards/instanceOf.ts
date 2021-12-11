@@ -1,4 +1,4 @@
-import guard from './guard.ts';
+import guard from './guard';
 
 type GenericClass = { new(...args: never[]): unknown };
 
