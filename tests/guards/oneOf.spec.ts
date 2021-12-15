@@ -43,6 +43,7 @@ describe('Union guard (oneOf)', () => {
     });
 
     it('throws an error when no guards are provided', () => {
+        // @ts-expect-error empty array
         expect(() => oneOf(/* no args */)).toThrow();
     });
 });

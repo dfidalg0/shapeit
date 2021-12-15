@@ -1,5 +1,6 @@
 import isEqual from 'lodash.isequal';
 import { Guard } from '../types/guards';
+import { NonEmptyArray } from '../types/utils';
 import oneOf from './oneOf';
 import guard from './guard';
 
@@ -34,7 +35,7 @@ type Narrow<A> = A extends (...args: any) => any ? never : Cast<A,
  *   input; // typed as 'a' | 'b'
  * }
  */
-export default function narrow <T, U extends Narrow<T>[]> (...targets: U): Guard<U[number]> {
+export default function narrow<T, U extends NonEmptyArray<Narrow<T>>> (...targets: U): Guard<U[number]> {
     targets = targets.filter(t => typeof t !== 'function') as U;
 
     if (!targets.length) {
@@ -55,7 +56,9 @@ export default function narrow <T, U extends Narrow<T>[]> (...targets: U): Guard
         return isValid;
     }
 
-    return oneOf(...targets.map(t => narrow(t)));
+    const narrows = targets.map(t => narrow(t)) as NonEmptyArray<any>;
+
+    return oneOf(...narrows);
 }
 
 function genType(target: unknown) {

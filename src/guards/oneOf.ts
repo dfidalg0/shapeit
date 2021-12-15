@@ -1,5 +1,6 @@
 import { PrimitiveOrGuard, GuardType } from '../types/guards';
 import { ValidationErrors } from '../types/validation';
+import { NonEmptyArray } from '../types/utils';
 import { resolveGuard } from '../utils/guards';
 import makeGuard from './guard';
 
@@ -16,7 +17,7 @@ import makeGuard from './guard';
  *     console.error(isValid.errors); // Errors found
  * }
  */
-export default function oneOf<T extends PrimitiveOrGuard<unknown>[]>(...types: T) {
+export default function oneOf<T extends NonEmptyArray<PrimitiveOrGuard<unknown>>>(...types: T) {
     if (!types.length) {
         throw new Error('No guards provided');
     }

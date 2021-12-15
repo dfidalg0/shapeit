@@ -1,4 +1,5 @@
 import { narrow } from '@/guards';
+import { NonEmptyArray, Primitive } from '@/types/utils';
 import { cloneDeep } from 'lodash';
 
 describe('Narrow guard', () => {
@@ -7,7 +8,7 @@ describe('Narrow guard', () => {
 
         const [invalid, ...valid] = Object.values(data);
 
-        const guard = narrow(...valid);
+        const guard = narrow(...valid as NonEmptyArray<Primitive>);
 
         for (const input of valid) {
             expect(guard(input)).toBe(true);
