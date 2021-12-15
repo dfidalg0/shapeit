@@ -349,6 +349,27 @@ else {
 
 <details>
 <summary>
+    <code>allOf(...types: (Primitive | Guard)[])</code>
+</summary>
+
+Creates a guard for a intersection type from primitive names or other guards
+```js
+const isValid = allOf(
+    looseShape({ a: 'string' }),
+    looseShape({ b: 'number' })
+);
+
+if (isValid(input)) {
+    doSomethingWith(input); // input is typed as { a: string; b: number; }
+}
+else {
+    console.error(isValid.errors); // Errors found
+}
+```
+</details>
+
+<details>
+<summary>
     <code>shape(schema: GuardSchema, strict = true)</code>
 </summary>
 
@@ -493,6 +514,37 @@ if (isLikeMyVerySpecificObject(input)) {
 
 <details>
 <summary>
+  <code>unknown()</code>
+</summary>
+
+Creates a guard that always validates
+
+Equivalent to `unknown` type in TS.
+</details>
+
+<details>
+<summary>
+  <code>never()</code>
+</summary>
+Creates a guard that never validates
+
+Equivalent to `never` type in TS.
+</details>
+
+<details>
+<summary>
+  <code>any()</code>
+</summary>
+
+Creates a guard that always validates
+
+Equivalent to `any` type in TS.
+
+For improved type safety, use unknown instead
+</details>
+
+<details>
+<summary>
   <code>custom(name: string, validator: (input: unknown) => input is any)</code>
 </summary>
 
@@ -534,6 +586,20 @@ const myCustomType = sp.custom(
 </details>
 
 #### Helpers
+
+<details>
+<summary>
+    <code>looseShape(schema: GuardSchema)</code>
+</summary>
+Equivalent of <code>shape(schema, false)</code>
+</details>
+
+<details>
+<summary>
+    <code>strictShape(schema: GuardSchema)</code>
+</summary>
+Equivalent of <code>shape(schema, true)</code>
+</details>
 
 <details>
 <summary>
