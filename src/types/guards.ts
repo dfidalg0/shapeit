@@ -16,7 +16,9 @@ export type Guard<T> = {
 /**
  * Specific typeguard for objects with different shapes
  */
-export type ShapeGuard<T extends Record<string, unknown> = Record<string, unknown>> = Guard<T> & {
+export type ShapeGuard<
+    T extends Record<string, unknown> = Record<string, unknown>
+> = Guard<T> & {
     _shape: {
         schema: GuardSchema;
         strict: boolean;

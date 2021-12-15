@@ -1,4 +1,4 @@
-import { shape } from '@/guards';
+import { strictShape, looseShape } from '@/guards';
 import { errorMessage } from '@/utils/messages';
 import { pick } from 'lodash';
 
@@ -6,7 +6,7 @@ const data = genData();
 
 describe('Shape guard', () => {
     it('ensures an object is a plain record', () => {
-        const guard = shape({});
+        const guard = strictShape({});
 
         for (const type in data) {
             if (type === 'object') continue;
@@ -21,9 +21,9 @@ describe('Shape guard', () => {
     });
 
     it('ensures an object matches a shape', () => {
-        const guard = shape({
+        const guard = strictShape({
             string: 'string',
-            object: shape({
+            object: strictShape({
                 number: 'number'
             })
         });
@@ -46,7 +46,7 @@ describe('Shape guard', () => {
     });
 
     it('ensures all keys of an object match their types', () => {
-        const guard = shape({
+        const guard = strictShape({
             string: 'string',
             number: 'number'
         });
@@ -60,5 +60,31 @@ describe('Shape guard', () => {
         for (const input of invalidInputs) {
             expect(guard(input)).toBe(false);
         }
+    });
+
+    describe('strict', () => {
+        it('ensures an object has no additional properties', () => {
+            const guard = strictShape({
+                a: 'number'
+            });
+
+            expect(guard({
+                a: faker.datatype.number(),
+                [faker.datatype.string()]: faker.datatype.string(),
+            })).toBe(false);
+        });
+    });
+
+    describe('loose', () => {
+        it('allows an object to have additional properties', () => {
+            const guard = looseShape({
+                a: 'number'
+            });
+
+            expect(guard({
+                a: faker.datatype.number(),
+                [faker.datatype.string()]: faker.datatype.string(),
+            })).toBe(true);
+        });
     });
 });

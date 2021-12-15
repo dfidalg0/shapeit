@@ -13,5 +13,11 @@ export { default as literal } from './literal';
 export { default as pick } from './pick';
 export { default as omit } from './omit';
 export { default as instanceOf } from './instanceOf';
+export { default as any } from './any';
+export { default as unknown } from './unknown';
+export { default as never } from './never';
+export { default as allOf } from './allOf';
+export { default as looseShape } from './looseShape';
+export { default as strictShape } from './strictShape';
 
 export { custom } from './guard';
