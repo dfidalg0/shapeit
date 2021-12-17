@@ -7,6 +7,7 @@ import { Primitive, FromPrimitive } from './utils';
 export type Guard<T> = {
     (input: unknown): input is T;
     errors: ValidationErrors;
+    /**@private Do not modify this */
     _shape?: {
         schema: GuardSchema;
         strict: boolean;
@@ -19,10 +20,8 @@ export type Guard<T> = {
 export type ShapeGuard<
     T extends Record<string, unknown> = Record<string, unknown>
 > = Guard<T> & {
-    _shape: {
-        schema: GuardSchema;
-        strict: boolean;
-    };
+    /**@private Do not modify this */
+    _shape: Exclude<Guard<T>['_shape'], undefined>;
 }
 
 /**

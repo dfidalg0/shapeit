@@ -7,8 +7,50 @@
 
 shapeit is an object validation tools for Javascript and, specially, Typescript. With it, you can ensure any javascript object has a provided shape corresponding to a typescript type. You can also do asynchronous data validation of any nested object and get decent error messages.
 
-### **NOTE**: Breaking changes on 0.5
+### **NOTE**: Breaking changes
 
+### from 0.6.x to 0.7
+* `assert` function from validate now throws an error instead of returning the original contition.
+    * Fix: If you have any rule that uses `assert` two or more times sequentially, convert it to an array of rules.
+
+<details style="padding-left: 3.3rem;">
+<summary>
+Example (expand)
+</summary>
+
+```typescript
+sp.validate(myObj, {
+    myProperty: (value, assert) => {
+        assert(testCondition1(value), 'error message 1');
+        assert(testCondition2(value), 'error message 2');
+    }
+});
+```
+
+would be replaced by
+
+```typescript
+sp.validate(myObj, {
+    myProperty: [
+        (value, assert) => assert(testCondition1(value), 'error message 1'),
+        (value, assert) => assert(testCondition2(value), 'error message 2'),
+    ]
+});
+```
+
+or simply
+
+```typescript
+sp.validate(myObj, {
+    myProperty: [
+        value => sp.assert(testCondition1(value), 'error message 1'),
+        value => sp.assert(testCondition2(value), 'error message 2'),
+    ]
+});
+```
+</details>
+
+### from 0.4.x to 0.5
 * Importing `shapeit`'s subfolders won't work anymore.
     * Fix: If you had any import like `import { ... } from 'shapeit/...';`, import it directly from `'shapeit'`.
 
@@ -91,9 +133,17 @@ personShape.errors; // { '$.emails.2': [ "Invalid type provided. Expected: 'stri
 </details>
 
 ### Validation
-Validation can be a little bit trickier. It consists of a set of rules, which are functions that receive the object and an assert function. The trick here is that it works deeply.
+Validation consists of matching an object against a set of rules.
 
-A simple example would be like this
+A set of rules can be either
+
+* A validation function that receives the original object and the assert function
+* A validation object containing some of the input's keys, each one matching a set of rules for the corresponding key on the input
+* An array containing multiple sets of rules
+
+Any failing assertion will throw an AssertionError
+
+A simple example looks like this
 ```js
 const sp = require('shapeit');
 
@@ -108,8 +158,10 @@ sp.validate(person, {
     name: (name, assert) => {
         assert(name === 'John Doe', 'You must be John Doe');
     },
-    age: (age, assert) => {
-        assert(age >= 18, 'You must be at least 18 years old');
+    age: age => {
+        // assert can be imported directly from shapeit.
+        // The second argument is optional
+        sp.assert(age >= 18, 'You must be at least 18 years old');
     }
 }).then(result => {
     result.valid; // false
@@ -150,28 +202,28 @@ const person: Person = {
     }
 };
 
-validate(person, {
-    name: (name, assert) => {
-        assert(name === 'John Doe', 'You must be John Doe');
+sp.validate(person, {
+    name: name => {
+        sp.assert(name === 'John Doe', 'You must be John Doe');
     },
-    age: (age, assert) => {
-        assert(age >= 18, 'You must be at least 18 years old');
+    age: age => {
+        sp.assert(age >= 18, 'You must be at least 18 years old');
     },
     // An object validator can be an object with its keys
     job: {
         // Those rules will be evaluated only if key "job"
         // exists in the person object. So, don't need to
         // worry about that
-        id: async (jobId, assert) => {
-            assert(
+        id: async jobId => {
+            sp.assert(
                 await existsOnDb(jobId),
                 'This job doesnt exist on database'
             )
         },
         // Rules can be asynchronous functions 🥳
         // and all of them will be executed in parallel
-        bossId: async (bossId, assert) => {
-            assert(
+        bossId: async bossId => {
+            sp.assert(
                 await existsOnDb(bossId),
                 'This employee doesnt exist on database'
             )
@@ -181,14 +233,14 @@ validate(person, {
     // you can pass an array containing
     // its rule and the rules for its members
     emails: [
-        (emails, assert) => {
-            assert(emails.length > 0, 'Provide at least one email');
+        emails => {
+            sp.assert(emails.length > 0, 'Provide at least one email');
         },
         {
             // $each is a way to apply the same rule
             // to all the array elements
-            $each: (email, assert) => {
-                assert(isValidEmail(email), 'Invalid email');
+            $each: email => {
+                sp.assert(isValidEmail(email), 'Invalid email');
             }
         }
     ]
@@ -649,7 +701,7 @@ Shorthand for <code>oneOf(guard, 'null');</code>
 ## Roadmap
 
 * ~~Add ESM support~~ 🎉
-* Improve the validation API
+* ~~Improve the validation API~~ 🎉
 * Add validation mechanism to the guards API directly
 * Improve docs
 * Release v1.0

@@ -1,4 +1,4 @@
-import { validate } from '@/validation';
+import { validate, assert } from '@/validation';
 import { Rule, RulesSet } from '@/types/validation';
 import { NonEmptyArray } from '@/types/utils';
 import { times } from 'lodash';
@@ -25,24 +25,36 @@ describe('validate function', () => {
     });
 
     it('allows multiple rules to be applied on an object', async () => {
-        const description = faker.datatype.string();
-        const sym = Symbol(description);
+        const desc = faker.datatype.string();
+        const sym = Symbol(desc);
+
+        const err1 = faker.datatype.string();
+        const err2 = faker.datatype.string();
 
         const rules: NonEmptyArray<Rule<symbol>> = [
-            jest.fn((input, assert) => assert(input === sym, '')),
-            jest.fn((input, assert) => assert(input.description === description, ''))
+            jest.fn(input => assert(input === sym, err1)),
+            jest.fn(input => assert(input.description === desc, err2))
         ];
 
-        const result = await validate(sym, rules);
+        const r1 = await validate(sym, rules);
 
         for (const rule of rules) {
             expect(rule).toBeCalled();
         }
 
-        expect(result.valid).toBe(true);
-        expect(result.errors).toBe(null);
+        expect(r1.valid).toBe(true);
+        expect(r1.errors).toBe(null);
 
-        await expect(validate(sym, ...rules)).resolves.toEqual(result);
+        await expect(validate(sym, ...rules)).resolves.toEqual(r1);
+
+        const r2 = await validate(Symbol(`~${desc}`), rules);
+
+        expect(r2).toEqual({
+            valid: false,
+            errors: {
+                $: [err1, err2]
+            }
+        });
     });
 
     it('validates nested objects against rules', async () => {
@@ -100,5 +112,11 @@ describe('validate function', () => {
     it('throws if no rules are specified', async () => {
         // @ts-expect-error no rule passed
         await expect(() => validate([])).rejects.toThrow();
+    });
+
+    it('throws if a rule throws anything other than an assertion error', async () => {
+        const throwable = () => { throw new Error(); };
+
+        await expect(() => validate(null, throwable)).rejects.toThrow();
     });
 });

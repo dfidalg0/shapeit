@@ -16,7 +16,7 @@ export type ValidationResult = {
 export type ValidationErrors = ValidationResult['errors'];
 
 export interface Rule<T> {
-    (input: T, assert: <C> (condition: C, msg: string) => C): unknown;
+    (input: T, assert: typeof import('../validation/assert').default): unknown
 }
 
 export type RulesMap<T> = T extends object

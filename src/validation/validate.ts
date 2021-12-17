@@ -1,12 +1,14 @@
 import { NonEmptyArray } from '../types/utils';
 import { RulesSet, ValidationResult } from '../types/validation';
+import assert, { AssertionError } from './assert';
 
 /**
  * Validates an object against one or multiple sets of rules.
  *
  * A set of rules can be
  *
- * 1. A validation function that receives the original and an assert function
+ * 1. A validation function that receives the original object and the assert
+ *    function
  *
  * 2. A validation object containing some of the input's keys, each one matching
  *    a set of rules for the corresponding key on the input
@@ -79,19 +81,6 @@ export default async function validate<T>(
     };
 }
 
-
-function createAsserter() {
-    const errors: string[] = [];
-
-    const assert = <T>(cond: T, msg: string) => {
-        if (!cond) errors.push(msg);
-
-        return cond;
-    };
-
-    return [assert, errors] as const;
-}
-
 async function applyRulesRecursively<T>(
     input: T,
     rules: RulesSet<T>,
@@ -101,12 +90,13 @@ async function applyRulesRecursively<T>(
     if (typeof rules === 'function') {
         const isValid = rules;
 
-        const [assert, assertionErrors] = createAsserter();
+        try {
+            await isValid(input, assert);
+        }
+        catch (err) {
+            if (!(err instanceof AssertionError)) throw err;
 
-        await isValid(input, assert);
-
-        if (assertionErrors.length) {
-            (errors[path] ||= []).push(...assertionErrors);
+            (errors[path] ||= []).push(err.message);
         }
     }
     else {
