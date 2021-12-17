@@ -29,7 +29,7 @@ export type RulesMap<T> = T extends object
         }
     : never;
 
-export type RulesSet<T> = Rule<T> | RulesMap<T> | RulesSet<T>[];
+export type RulesSet<T> = Rule<T> | RulesMap<T> | [RulesSet<T>, ...RulesSet<T>[]];
 
 /**
  * This is an alias for RulesSet<T> in order to not break compatibility on
