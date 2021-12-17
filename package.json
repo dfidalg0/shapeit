@@ -36,21 +36,21 @@
     "homepage": "https://github.com/diegood12/shapeit#readme",
     "devDependencies": {
         "@types/faker": "^5.5.9",
-        "@types/jest": "^27.0.2",
-        "@types/lodash": "^4.14.176",
+        "@types/jest": "^27.0.3",
+        "@types/lodash": "^4.14.178",
         "@types/lodash.isequal": "^4.5.5",
-        "@typescript-eslint/eslint-plugin": "^5.3.0",
-        "@typescript-eslint/parser": "^5.3.0",
-        "compare-versions": "^4.0.1",
-        "eslint": "^8.1.0",
-        "eslint-plugin-import": "^2.25.2",
+        "@typescript-eslint/eslint-plugin": "^5.7.0",
+        "@typescript-eslint/parser": "^5.7.0",
+        "compare-versions": "^4.1.2",
+        "eslint": "^8.4.1",
+        "eslint-plugin-import": "^2.25.3",
         "eslint-plugin-lodash": "^7.3.0",
         "faker": "^5.5.3",
-        "jest": "^27.3.1",
+        "jest": "^27.4.5",
         "lodash": "^4.17.21",
         "lodash.isequal": "^4.5.0",
-        "ts-jest": "^27.0.7",
-        "typescript": "^4.4.4",
-        "vite": "^2.6.13"
+        "ts-jest": "^27.1.2",
+        "typescript": "^4.5.4",
+        "vite": "^2.7.3"
     }
 }
