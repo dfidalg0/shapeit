@@ -1,5 +1,7 @@
 import { validate } from '@/validation';
 import { Rule, RulesSet } from '@/types/validation';
+import { NonEmptyArray } from '@/types/utils';
+import { times } from 'lodash';
 
 describe('validate function', () => {
     it('validates an input against a rule', async () => {
@@ -26,7 +28,7 @@ describe('validate function', () => {
         const description = faker.datatype.string();
         const sym = Symbol(description);
 
-        const rules: Rule<symbol>[] = [
+        const rules: NonEmptyArray<Rule<symbol>> = [
             jest.fn((input, assert) => assert(input === sym, '')),
             jest.fn((input, assert) => assert(input.description === description, ''))
         ];
@@ -39,6 +41,8 @@ describe('validate function', () => {
 
         expect(result.valid).toBe(true);
         expect(result.errors).toBe(null);
+
+        await expect(validate(sym, ...rules)).resolves.toEqual(result);
     });
 
     it('validates nested objects against rules', async () => {
@@ -63,5 +67,38 @@ describe('validate function', () => {
 
         expect(r1.errors).toBe(null);
         expect(r2.errors).toEqual({ '$.string': [error] });
+    });
+
+    it('validates each element of an array with $each property', async () => {
+        const length = faker.datatype.number({ min: 3, max: 10 });
+        const input = times(length, () => faker.datatype.string(4));
+
+        const error = faker.datatype.string();
+
+        const r1 = await validate(input, {
+            $each: (value, assert) => assert(value.length > 3, error)
+        });
+
+        expect(r1).toEqual({
+            valid: true,
+            errors: null
+        });
+
+        const r2 = await validate(input, {
+            $each: (value, assert) => assert(value.length > 20, error)
+        });
+
+        expect(r2).toEqual({
+            valid: false,
+            errors: input.reduce((res, _, index) => {
+                res[`$.${index}`] = [error];
+                return res;
+            }, {} as Record<string, string[]>)
+        });
+    });
+
+    it('throws if no rules are specified', async () => {
+        // @ts-expect-error no rule passed
+        await expect(() => validate([])).rejects.toThrow();
     });
 });

@@ -1,4 +1,5 @@
 import { arrayOf } from '@/guards';
+import { sizeErrorMessage } from '@/utils/messages';
 import { times } from 'lodash';
 
 describe('arrayOf guard', () => {
@@ -19,6 +20,33 @@ describe('arrayOf guard', () => {
         for (const input of invalidInputs) {
             expect(guard(input)).toBe(false);
         }
+    });
+
+    it('tests for max length', () => {
+        const length = faker.datatype.number({ min: 1, max: 10 });
+
+        const guard = arrayOf('string', length);
+
+        const validInputs = times(
+            length,
+            i => times(i + 1, () => faker.datatype.string())
+        );
+        const invalidInput = times(length + 1, () => faker.datatype.string());
+
+        for (const input of validInputs) {
+            expect(guard(input)).toBe(true);
+            expect(guard.errors).toBe(null);
+        }
+
+        expect(guard(invalidInput)).toBe(false);
+        expect(guard.errors).toEqual({
+            $: [sizeErrorMessage(`<= ${length}`)]
+        });
+    });
+
+    it('throws an error if created with an invalid maximum size', () => {
+        expect(() => arrayOf('string', 0)).toThrow();
+        expect(() => arrayOf('number', -5)).toThrow();
     });
 
     it('tells in which position the error is', () => {
