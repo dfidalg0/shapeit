@@ -24,6 +24,7 @@ export function $$<T extends BaseType[]>(...values: T): Literal<T> {
     return { values };
 }
 
+/* istanbul ignore next */
 export function escapeRegex(string: string) {
     if (typeof string !== 'string') {
         throw new TypeError('Expected a string');

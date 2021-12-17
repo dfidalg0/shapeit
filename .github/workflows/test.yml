@@ -38,6 +38,13 @@ jobs:
         id: tests
         run: npm test
 
+      - name: Submit coverage
+        id: codecov
+        uses: codecov/codecov-action@v2
+        with:
+            token: ${{ secrets.CODECOV_TOKEN }}
+            files: ./coverage/coverage-final.json
+
       - name: Release version
         id: release
         run: npm run release
