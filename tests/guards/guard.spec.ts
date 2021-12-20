@@ -1,7 +1,9 @@
 import { custom } from '@/guards';
 import { errorMessage } from '@/utils/messages';
+import { makeErrors } from '@/utils/validation';
+import { times } from 'lodash';
 
-describe('Custom guard creator', () => {
+describe('Base guard creator', () => {
     it('allows the user to define its own typeguard', () => {
         const validInput = Symbol();
         const invalidInput = Symbol();
@@ -21,7 +23,10 @@ describe('Custom guard creator', () => {
     });
 
     it('allows the user to specify its own error messages', () => {
-        const errors = {};
+        const errors = {
+            $: undefined,
+            '$.my-path': []
+        };
 
         const guard = custom('my-type', (_): _ is unknown => {
             guard.errors = errors;
@@ -31,7 +36,7 @@ describe('Custom guard creator', () => {
 
         guard(0);
 
-        expect(guard.errors).toBe(errors);
+        expect(guard.errors).toEqual(errors);
     });
 
     it('warns when errors are set and input is valid', () => {
@@ -67,6 +72,43 @@ describe('Custom guard creator', () => {
         expect(console.warn).not.toBeCalled();
 
         guard(false);
+        expect(console.warn).toBeCalled();
+    });
+
+    it('returns all errors with errors.all', () => {
+        const errMap = Object.fromEntries(
+            times(3, () => [
+                faker.datatype.string(),
+                times(3, () => faker.datatype.string())
+            ])
+        );
+
+        const guard = custom('typename', (input): input is true => {
+            if (input) return true;
+
+            guard.errors = errMap;
+
+            return false;
+        });
+
+        guard(false);
+
+        expect(guard.errors.all).toEqual(makeErrors(errMap).all);
+
+        guard(true);
+
+        expect(guard.errors).toBe(null);
+    });
+
+    it('warns when errors are set to any value outside the validator', () => {
+        jest.spyOn(console, 'warn').mockImplementationOnce(
+            () => { }
+        );
+
+        const guard = custom('name', (_input): _input is never => false);
+
+        guard.errors = {};
+
         expect(console.warn).toBeCalled();
     });
 });

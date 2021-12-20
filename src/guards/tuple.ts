@@ -1,5 +1,5 @@
 import { PrimitiveOrGuard, UnshapeTuple } from '../types/guards';
-import { ValidationErrors } from '../types/validation';
+import { ErrorsMapping } from '../types/validation';
 import { resolveGuard } from '../utils/guards';
 import { sizeErrorMessage } from '../utils/messages';
 import makeGuard from './guard';
@@ -31,7 +31,7 @@ export default function tuple<T extends PrimitiveOrGuard<unknown>[]>(...types: T
             return false;
         }
 
-        const errors: Exclude<ValidationErrors, null> = {};
+        const errors: ErrorsMapping = {};
 
         let result = true;
 
@@ -43,12 +43,12 @@ export default function tuple<T extends PrimitiveOrGuard<unknown>[]>(...types: T
             result = result && current;
 
             if (guard.errors) {
-                for (const [subpath, messages] of Object.entries(guard.errors)) {
+                for (const { path: subpath, message } of guard.errors.all) {
                     const root = `$.${i}`;
 
                     const path = subpath.replace('$', root);
 
-                    (errors[path] ||= []).push(...messages || []);
+                    (errors[path] ||= []).push(message);
                 }
             }
         }

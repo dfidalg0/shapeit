@@ -5,7 +5,6 @@
         "module": "ES2020",
         "moduleResolution": "node",
         "lib": ["ES2020", "DOM"],
-        "baseUrl": ".",
         "allowJs": false,
         "checkJs": false,
         "declaration": true,

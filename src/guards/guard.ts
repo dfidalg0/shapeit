@@ -1,7 +1,8 @@
 import { Guard } from '../types/guards';
-import { ValidationErrors } from '../types/validation';
+import { ErrorsMapping, ValidationErrors } from '../types/validation';
 import { errorMessage } from '../utils/messages';
 import { config } from '..';
+import { makeErrors } from '../utils/validation';
 
 /**
  * Creates a guard from a typeguard function
@@ -16,29 +17,36 @@ import { config } from '..';
  * });
  */
 export default function guard<T>(name: string, validator: (input: unknown) => input is T) {
-    let errors: ValidationErrors = null;
+    let rawErrors: ErrorsMapping | null = null;
+    let errors : ValidationErrors | null = null;
+    let overrideAllowed = false;
     let override = false;
 
     const isValid = <Guard<T>> Object.defineProperties(
         (input: unknown): input is T => {
+            overrideAllowed = true;
             override = false;
 
             const result = validator(input);
 
+            overrideAllowed = false;
+
             if (!override) {
-                errors = result ? null : {
+                rawErrors = result ? null : {
                     $: [errorMessage(name)]
                 };
             }
 
             if (config.get('showWarnings')) {
-                if (override && result && errors) {
+                if (override && result && rawErrors) {
                     console.warn(`[Shapeit Warning] custom guard ${name} error was set when input was valid`);
                 }
-                else if (override && !result && !errors) {
+                else if (override && !result && !rawErrors) {
                     console.warn(`[Shapeit Warning] custom guard ${name} error was set to null when input was not valid`);
                 }
             }
+
+            errors = rawErrors ? makeErrors(rawErrors) : null;
 
             return result;
         }, {
@@ -46,8 +54,16 @@ export default function guard<T>(name: string, validator: (input: unknown) => in
                 get() {
                     return errors;
                 },
-                set (err: ValidationErrors) {
-                    errors = err;
+                set (err: ErrorsMapping | null) {
+                    if (!overrideAllowed) {
+                        if (config.get('showWarnings')) {
+                            console.warn('[Shapeit warning] guard errors override outside validator detected');
+                        }
+
+                        return;
+                    }
+
+                    rawErrors = err;
                     override = true;
                 }
             }

@@ -1,5 +1,5 @@
 import { GuardSchema, Guard, ShapeGuard, UnshapeSchema } from '../types/guards';
-import { ValidationErrors } from '../types/validation';
+import { ErrorsMapping } from '../types/validation';
 import { resolveGuard, isPlainRecord } from '../utils/guards';
 import { errorMessage } from '../utils/messages';
 import makeGuard from './guard';
@@ -39,7 +39,7 @@ export default function shape<V extends GuardSchema>(
             }
 
             let result = true;
-            let errors: Exclude<ValidationErrors, null> = {};
+            let errors: ErrorsMapping = {};
 
             if (strict) {
                 const extraneousKeys = Object.keys(omit(input, keys));
@@ -49,7 +49,7 @@ export default function shape<V extends GuardSchema>(
                         res[`$.${key}`] = [errorMessage('undefined')];
 
                         return res;
-                    }, {} as Exclude<ValidationErrors, null>);
+                    }, {} as ErrorsMapping);
 
                     result = false;
                 }
@@ -68,10 +68,10 @@ export default function shape<V extends GuardSchema>(
                 result = result && current;
 
                 if (guard.errors) {
-                    for (const [subpath, messages] of Object.entries(guard.errors)) {
+                    for (const { path: subpath, message } of guard.errors.all) {
                         const path = subpath.replace('$', root);
 
-                        (errors[path] ||= []).push(...messages || []);
+                        (errors[path] ||= []).push(message);
                     }
                 }
             }

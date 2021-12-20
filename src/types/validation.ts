@@ -3,17 +3,19 @@ export type ValidationResult = {
     errors: null;
 } | {
     valid: false;
-    errors: Partial<Record<string, string[]>> /* & {
-        readonly all: ValidationError[];
-    }; */;
+    errors: ValidationErrors;
 }
 
-// export interface ValidationError {
-//     path: string;
-//     message: string;
-// }
+export interface ValidationError {
+    path: string;
+    message: string;
+}
 
-export type ValidationErrors = ValidationResult['errors'];
+export type ErrorsMapping = Partial<Record<string, string[]>>;
+
+export type ValidationErrors = ErrorsMapping & {
+    readonly all: ValidationError[];
+};
 
 export interface Rule<T> {
     (input: T, assert: typeof import('../validation/assert').default): unknown

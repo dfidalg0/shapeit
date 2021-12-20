@@ -1,5 +1,5 @@
 import { PrimitiveOrGuard, GuardType } from '../types/guards';
-import { ValidationErrors } from '../types/validation';
+import { ErrorsMapping } from '../types/validation';
 import { NonEmptyArray } from '../types/utils';
 import { resolveGuard } from '../utils/guards';
 import makeGuard from './guard';
@@ -28,12 +28,11 @@ export default function oneOf<T extends NonEmptyArray<PrimitiveOrGuard<unknown>>
         const result = guards.some(guard => guard(input));
 
         if (!result) {
-            const errors: Exclude<ValidationErrors, null> = {};
+            const errors: ErrorsMapping = {};
 
             for (const guard of guards) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                for (const [path, guardErrors] of Object.entries(guard.errors!)) {
-                    (errors[path] ||= []).push(...guardErrors || []);
+                for (const { path, message } of guard.errors!.all) {
+                    (errors[path] ||= []).push(message);
                 }
             }
 

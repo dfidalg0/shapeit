@@ -98,6 +98,9 @@ if (personShape(p2)) {
 
 personShape.errors; // { '$.age': [ "Invalid type provided. Expected: 'number'" ] }
 
+// Or, for a list of all errors
+
+personShape.errors.all // [{ path: '$.age', message: "Invalid type provided. Expected: 'number'" }]
 ```
 
 <details>

@@ -1,3 +1,4 @@
+import { makeErrors } from '../utils/validation';
 import { NonEmptyArray } from '../types/utils';
 import { RulesSet, ValidationResult } from '../types/validation';
 import assert, { AssertionError } from './assert';
@@ -75,7 +76,7 @@ export default async function validate<T>(
     await applyRulesRecursively(input, rulesSet, '$', errors);
 
     return Object.keys(errors).length ? {
-        valid: false, errors
+        valid: false, errors: makeErrors(errors)
     } : {
         valid: true, errors: null
     };

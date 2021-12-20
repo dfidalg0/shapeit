@@ -1,5 +1,5 @@
 import { PrimitiveOrGuard, GuardType } from '../types/guards';
-import { ValidationErrors } from '../types/validation';
+import { ErrorsMapping } from '../types/validation';
 import { resolveGuard } from '../utils/guards';
 import { sizeErrorMessage } from '../utils/messages';
 import makeGuard from './guard';
@@ -42,7 +42,7 @@ export default function arrayOf<T extends PrimitiveOrGuard<unknown>>(
 
         let result = true;
 
-        const errors: Exclude<ValidationErrors, null> = {};
+        const errors: ErrorsMapping = {};
 
         for (let i = 0; i < input.length; ++i) {
             const current = guard(input[i]);
@@ -50,12 +50,12 @@ export default function arrayOf<T extends PrimitiveOrGuard<unknown>>(
             result = result && current;
 
             if (guard.errors) {
-                for (const [subpath, messages] of Object.entries(guard.errors)) {
+                for (const { path: subpath, message } of guard.errors.all) {
                     const root = `$.${i}`;
 
                     const path = subpath.replace('$', root);
 
-                    (errors[path] ||= []).push(...messages || []);
+                    (errors[path] ||= []).push(message);
                 }
             }
         }

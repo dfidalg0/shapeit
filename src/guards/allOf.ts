@@ -1,5 +1,5 @@
 import { PrimitiveOrGuard, GuardType } from '../types/guards';
-import { ValidationErrors } from '../types/validation';
+import { ErrorsMapping } from '../types/validation';
 import { NonEmptyArray } from '../types/utils';
 import { resolveGuard } from '../utils/guards';
 import makeGuard from './guard';
@@ -54,11 +54,11 @@ export default function allOf<T extends GuardArray>(...types: T) {
         }
 
         if (!result) {
-            const errors: Exclude<ValidationErrors, null> = {};
+            const errors: ErrorsMapping = {};
 
             for (const guard of guards) {
-                for (const [path, guardErrors] of Object.entries(guard.errors || {})) {
-                    (errors[path] ||= []).push(...guardErrors || []);
+                for (const { path, message } of guard.errors?.all || []) {
+                    (errors[path] ||= []).push(message);
                 }
             }
 

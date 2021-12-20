@@ -109,6 +109,19 @@ describe('validate function', () => {
         });
     });
 
+    it('exposes all errors through errors.all', async () => {
+        const messages = times(10, () => faker.datatype.string());
+
+        const { errors } = await validate(
+            null,
+            messages.map(msg => () => assert(false, msg)) as any
+        );
+
+        expect(errors.all).toEqual(messages.map(message => ({
+            path: '$', message
+        })));
+    });
+
     it('throws if no rules are specified', async () => {
         // @ts-expect-error no rule passed
         await expect(() => validate([])).rejects.toThrow();

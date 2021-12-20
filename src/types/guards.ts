@@ -1,4 +1,4 @@
-import { ValidationErrors } from './validation';
+import { ErrorsMapping, ValidationErrors } from './validation';
 import { Primitive, FromPrimitive } from './utils';
 
 /**
@@ -6,7 +6,8 @@ import { Primitive, FromPrimitive } from './utils';
  */
 export type Guard<T> = {
     (input: unknown): input is T;
-    errors: ValidationErrors;
+    set errors(err: ErrorsMapping | null);
+    get errors(): ValidationErrors | null;
     /**@private Do not modify this */
     _shape?: {
         schema: GuardSchema;

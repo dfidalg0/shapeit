@@ -1,4 +1,4 @@
-import { shape, allOf } from '@/guards';
+import { looseShape, allOf } from '@/guards';
 import { Primitive } from '@/types/utils';
 
 describe('Union guard (allOf)', () => {
@@ -33,12 +33,12 @@ describe('Union guard (allOf)', () => {
 
     it('validates an intersection of two guards', () => {
         const guard = allOf(
-            shape({
+            looseShape({
                 a: 'number',
-            }, false),
-            shape({
+            }),
+            looseShape({
                 b: 'string'
-            }, false)
+            })
         );
 
         const data = genData();
