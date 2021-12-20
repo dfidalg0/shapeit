@@ -47,11 +47,10 @@ export default function narrow<T, U extends NonEmptyArray<Narrow<T>>> (...target
 
         const typename = genType(target);
 
-        const isValid = guard(typename, (input): input is U[number] => {
-            const result = isEqual(input, target);
-
-            return result;
-        });
+        const isValid = guard(
+            typename,
+            (input): input is U[number] => isEqual(input, target)
+        );
 
         return isValid;
     }
@@ -61,24 +60,48 @@ export default function narrow<T, U extends NonEmptyArray<Narrow<T>>> (...target
     return oneOf(...narrows);
 }
 
-function genType(target: unknown) {
-    const type = target === null ? 'null' : typeof target;
+export function genType(target: unknown) {
+    const type = typeOf(target);
 
     if (type !== 'object') {
         if (['null', 'undefined'].includes(type))
             return type;
 
         if (type === 'symbol')
-            return `(symbol)`;
+            return `Symbol(${(target as symbol).description})`;
 
-        return `(${type}) ${target}`;
+        if (type === 'string')
+            return `[string] ${JSON.stringify(target)}`;
+
+        return `[${type}] ${target}`;
     }
 
-    const constructor = Object.getPrototypeOf(target).constructor.name;
+    const constructor = (
+        Object.getPrototypeOf(target)?.constructor.name ||
+        'Object: null prototype'
+    );
 
-    const content = JSON.stringify(target);
+    const content: string = Object.entries(target as object)
+        .map(([key, value]) => `${JSON.stringify(key)}: ${genType(value)}`)
+        .join(', ');
 
-    return content ?
-        `(${constructor}) ${content}` :
-        `(${constructor})`;
+    return `[${constructor}] {${content}}`;
+}
+
+function typeOf(target: unknown) {
+    const type = target === null ? 'null' : typeof target;
+
+    if (type === 'object') {
+        const constructor = Object.getPrototypeOf(target)?.constructor;
+
+        if (constructor === Number) {
+            return 'number';
+        }
+
+        if (constructor === String) {
+            return 'string';
+        }
+    }
+
+    return type;
 }

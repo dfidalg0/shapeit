@@ -1,6 +1,6 @@
 {
     "name": "shapeit",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "Object validation tools for Javascript and, specially, Typescript",
     "main": "shapeit.umd.js",
     "module": "shapeit.es.mjs",
