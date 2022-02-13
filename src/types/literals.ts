@@ -1,46 +1,39 @@
 import { FromPrimitive } from './utils';
 
-export type BaseName =
-    | 'string' | 'number' | 'bigint'
-    |'boolean' | 'null'   | 'undefined';
+export type LiterableName =
+    | 'string' | 'number'
+    | 'bigint' | 'boolean'
+    | 'null'   | 'undefined';
 
-export type BaseType = FromPrimitive<BaseName>;
+export type Literable = FromPrimitive<LiterableName>;
 
-export interface Literal<T extends BaseType[] = BaseType[]> {
-    values: T;
-}
+export type LiteralDescriptor<T extends Literable = Literable> = {
+    /**
+     * @private This is used only to control typings. DO NOT USE
+     */
+    _type: T;
+    typename: string;
+    regex: string;
+};
 
-type FromNarrow<N extends Literal> = N extends Literal<infer T>
-    ? T[number]
-    : never;
+export type FromLiteralDescriptor<T> = T extends LiteralDescriptor<infer U> ? U : never;
 
-export interface LitType<
-    T extends (BaseName | Literal)[] = (BaseName | Literal)[]
-> {
-    types: T;
-}
+export type TemplateItem = string | LiteralDescriptor<Literable>;
 
-type _FilterOr<T extends Literal | BaseName> = T extends BaseName
-    ? FromPrimitive<T>
-    : T extends Literal
-        ? FromNarrow<T>
-        : never;
+export type Template = Array<TemplateItem>;
 
-type FromOr<O extends LitType> = O extends LitType<infer T>
-    ? _FilterOr<T[number]>
-    : never;
-
-export type Template = Readonly<(string | BaseName | Literal | LitType)[]>;
+export type ResolveLiteralType<T> =
+    T extends LiteralDescriptor<infer S>
+        ? S extends Literable
+            ? `${S}`
+            : ''
+        : T extends string
+            ? T
+            : '';
 
 export type Concat<T extends Template> =
-    T extends [infer S, ...(infer P)] ?
-        P extends Template ?
-            S extends string ?
-                `${S}${Concat<P>}`
-                : S extends Literal ?
-                    `${FromNarrow<S>}${Concat<P>}`
-                    : S extends LitType ?
-                        `${FromOr<S>}${Concat<P>}`
-                        : ''
+    T extends [infer S, ...infer P]
+        ? P extends Template
+            ? `${ResolveLiteralType<S>}${Concat<P>}`
             : ''
-        : ''
+        : '';

@@ -1,7 +1,7 @@
 import { literal } from '@/guards';
 import { $, $$ } from '@/utils/literals';
 import { pick, times } from 'lodash';
-import { BaseName } from '@/types/literals';
+import { LiterableName } from '@/types/literals';
 
 const litTypes = ['string', 'number', 'bigint', 'null', 'undefined', 'boolean'] as const;
 const data = pick(genData(), litTypes);
@@ -10,7 +10,7 @@ describe('TS 4.1 Literals type guard', () => {
     it('ensures a type matches a specified literal', () => {
         for (const [type, value] of Object.entries(data)) {
             const suffix = faker.datatype.string(2);
-            const guard = literal($(type as BaseName), suffix);
+            const guard = literal($(type as LiterableName), suffix);
 
             const validInput = `${value}${suffix}`;
             const invalidInput = validInput + faker.datatype.number(9);

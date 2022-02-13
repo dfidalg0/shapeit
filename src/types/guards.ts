@@ -6,6 +6,7 @@ import { Primitive, FromPrimitive } from './utils';
  */
 export type Guard<T> = {
     (input: unknown): input is T;
+    readonly typename: string;
     set errors(err: ErrorsMapping | null);
     get errors(): ValidationErrors | null;
     /**@private Do not modify this */

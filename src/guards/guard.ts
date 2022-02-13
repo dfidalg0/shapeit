@@ -66,6 +66,12 @@ export default function guard<T>(name: string, validator: (input: unknown) => in
                     rawErrors = err;
                     override = true;
                 }
+            },
+            typename: {
+                value: name,
+                configurable: false,
+                enumerable: true,
+                writable: false,
             }
         }
     );
