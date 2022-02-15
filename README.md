@@ -502,7 +502,7 @@ if (entryShape(input)) {
     <code>literal(...template: Template)</code>
 </summary>
 
-Creates a guard for a template literal type. It's used alongside with `$` and `$$`.
+Creates a guard for a template literal type. It's used alongside with `$`, `$$` and `$$$`.
 
 `$` is used for generating a tempate type derived from a primitive or a list of primitives or literals
 
@@ -524,6 +524,18 @@ const versionTemplate = sp.literal(
 
 if (versionTemplate(input)) {
   input; // input is typed as `${bigint}.${bigint}.${bigint}${'' | '-alpha' | '-beta'}`
+}
+```
+
+`$$$` is used for generating recursive template types
+
+```js
+const testTemplate = sp.literal(
+    'a-', sp.$('number', sp.$$$('b', $('number')))
+);
+
+if (testTemplate(input)) {
+    input; // input is typed as `a-${number | `b-${number}`}`;
 }
 ```
 </details>
