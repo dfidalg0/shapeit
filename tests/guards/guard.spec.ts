@@ -1,9 +1,13 @@
-import { custom } from '@/guards';
+import { custom, guard } from '@/guards';
 import { errorMessage } from '@/utils/messages';
 import { makeErrors } from '@/utils/validation';
 import { times } from 'lodash';
 
 describe('Base guard creator', () => {
+    it('is aliased as `custom`', () => {
+        expect(guard).toBe(custom);
+    });
+
     it('allows the user to define its own typeguard', () => {
         const validInput = Symbol();
         const invalidInput = Symbol();

@@ -1,4 +1,4 @@
-import assert, { AssertionError } from '@/validation/assert';
+import { assert, AssertionError } from '@/validation';
 
 describe('assert function', () => {
     it('throws when a condition is not matched', () => {
@@ -10,5 +10,11 @@ describe('assert function', () => {
 
     it('continues execution when condition is matched', () => {
         expect(() => assert(true, '')).not.toThrow();
+    });
+
+    describe('assertion error', () => {
+        it('extends the `Error` native class', () => {
+            expect(new AssertionError()).toBeInstanceOf(Error);
+        });
     });
 });

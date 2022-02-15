@@ -17,7 +17,6 @@ const regexMap = {
     undefined: 'undefined'
 };
 
-
 /**
  * Creates a literal descriptor from type names or constant unions
  *
@@ -81,7 +80,7 @@ export function $$<T extends Literable[]>(...values: T): LiteralDescriptor<T[num
  * $$$('a', $('number')); // Equivalent to `${`a${number}`}` in a literal type
  */
 export function $$$<T extends Template>(...template: T) {
-    let regex = '';
+    let regex = '(';
     let typename = '`';
 
     for (const item of template) {
@@ -95,6 +94,7 @@ export function $$$<T extends Template>(...template: T) {
         }
     }
 
+    regex += ')';
     typename += '`';
 
     return {
@@ -103,7 +103,7 @@ export function $$$<T extends Template>(...template: T) {
     } as LiteralDescriptor<Concat<T>>;
 }
 
-function valueToRegex(value: Literable) {
+export function valueToRegex(value: Literable) {
     if (typeof value !== 'string') {
         value = String(value);
     }

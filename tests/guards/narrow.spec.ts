@@ -1,4 +1,5 @@
-import narrow, { genType } from '@/guards/narrow';
+import { narrow } from '@/guards';
+import { genType } from '@/guards/narrow';
 import { NonEmptyArray, Primitive } from '@/types/utils';
 import { cloneDeep, pick } from 'lodash';
 
