@@ -717,6 +717,6 @@ Shorthand for <code>oneOf(guard, 'null');</code>
 
 * ~~Add ESM support~~ 🎉
 * ~~Improve the validation API~~ 🎉
-* Add validation mechanism to the guards API directly
+* ~~Add validation mechanism to the guards API directly~~ 🎉
 * Improve docs
 * Release v1.0

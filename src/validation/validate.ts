@@ -119,8 +119,10 @@ async function applyRulesRecursively<T>(
             promises = keys
                 .filter(key => key in input)
                 .map(key => applyRulesRecursively(
-                    input[key], (rules as any)[key],
-                    `${path}.${key}`, errors
+                    input[key],
+                    (rules as any)[key],
+                    `${path}.${key}`,
+                    errors
                 ));
         }
 

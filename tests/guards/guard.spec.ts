@@ -1,6 +1,7 @@
 import { custom, guard } from '@/guards';
 import { errorMessage } from '@/utils/messages';
 import { makeErrors } from '@/utils/validation';
+import { assert } from '@/validation';
 import { times } from 'lodash';
 
 describe('Base guard creator', () => {
@@ -114,5 +115,45 @@ describe('Base guard creator', () => {
         guard.errors = {};
 
         expect(console.warn).toBeCalled();
+    });
+
+    it('allows a validate function to be chained', async () => {
+        const validString = faker.datatype.string(8);
+        const errorMessage = faker.datatype.string();
+
+        const typeguard = guard(
+            'string',
+            (input): input is string => typeof input === 'string'
+        );
+
+        const validator = typeguard.validate(
+            msg => assert(msg === validString, errorMessage),
+        );
+
+        const invalidNumber = faker.datatype.number();
+        const invalidString = faker.datatype.string(10);
+
+        await expect(validator(invalidNumber)).resolves.toEqual({
+            typed: false,
+            valid: false,
+            target: invalidNumber,
+            errors: typeguard.errors,
+        });
+
+        await expect(validator(invalidString)).resolves.toEqual({
+            typed: true,
+            valid: false,
+            target: invalidString,
+            errors: {
+                $: [errorMessage],
+            },
+        });
+
+        await expect(validator(validString)).resolves.toEqual({
+            typed: true,
+            valid: true,
+            target: validString,
+            errors: null,
+        });
     });
 });

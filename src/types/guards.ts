@@ -1,5 +1,5 @@
-import { ErrorsMapping, ValidationErrors } from './validation';
-import { Primitive, FromPrimitive } from './utils';
+import { ErrorsMapping, RulesSet, ValidationErrors } from './validation';
+import { Primitive, FromPrimitive, NonEmptyArray } from './utils';
 
 /**
  * Typeguard for a determined type.
@@ -9,6 +9,21 @@ export type Guard<T> = {
     readonly typename: string;
     set errors(err: ErrorsMapping | null);
     get errors(): ValidationErrors | null;
+    readonly validate: (
+        ...rules: NonEmptyArray<RulesSet<T>>
+    ) => (
+        input: unknown
+    ) => Promise<{
+        typed: false;
+        valid: false;
+        errors: ValidationErrors;
+        target: unknown;
+    } | {
+        typed: true;
+        valid: boolean;
+        target: T;
+        errors: ValidationErrors | null;
+    }>
     /**@private Do not modify this */
     _shape?: {
         schema: GuardSchema;

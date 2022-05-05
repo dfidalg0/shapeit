@@ -1,8 +1,10 @@
 import { Guard } from '../types/guards';
-import { ErrorsMapping, ValidationErrors } from '../types/validation';
+import { ErrorsMapping, RulesSet, ValidationErrors } from '../types/validation';
 import { errorMessage } from '../utils/messages';
 import { config } from '..';
 import { makeErrors } from '../utils/validation';
+import { validate } from '../validation';
+import { NonEmptyArray } from '../types/utils';
 
 /**
  * Creates a guard from a typeguard function
@@ -69,6 +71,31 @@ export default function guard<T>(name: string, validator: (input: unknown) => in
             },
             typename: {
                 value: name,
+                configurable: false,
+                enumerable: true,
+                writable: false,
+            },
+            validate: {
+                value: (...rules: NonEmptyArray<RulesSet<T>>) => {
+                    return async (target: unknown) => {
+                        if (!isValid(target)) {
+                            return {
+                                typed: false,
+                                valid: false,
+                                errors: isValid.errors,
+                                target,
+                            };
+                        }
+
+                        const r = await validate(target, ...rules);
+
+                        return {
+                            typed: true,
+                            ...r,
+                            target,
+                        };
+                    };
+                },
                 configurable: false,
                 enumerable: true,
                 writable: false,
